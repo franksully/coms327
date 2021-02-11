@@ -1,3 +1,5 @@
-2/10/2021 14:00 ; (Amon) began work, added code for filling rooms
+2/10/2021 14:00 ; (Amon) began work, added code for filling rooms array
 2/10/2021 21:24 ; (Frank) adjusted values, added function for printing table
+2/10/2021 22:00 ; (Amon) added function for checking room overlaps
 2/10/2021 22:30 ; (Frank) ensured rooms stay within bounds, fixed printing of table
+2/11/2021 11:49 ; (Frank) implemented Amon's function for checking room overlaps
