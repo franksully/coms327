@@ -1,7 +1,0 @@
-Murathan Yildirim - murathan@iastate.edu
-Frank Sullivan - franks1@iastate.edu
-Amon McAllister - amonm@iastate.edu
-
-This program implemented a modified version of the abelian sandpile model.
-
-Our solution simply makes sand piles in the middle that goes to neighbors after reaching height.
