@@ -3,3 +3,4 @@
 2/10/2021 22:00 ; (Amon) added function for checking room overlaps
 2/10/2021 22:30 ; (Frank) ensured rooms stay within bounds, fixed printing of table
 2/11/2021 11:49 ; (Frank) implemented Amon's function for checking room overlaps
+2/11/2021 12:53 ; (Frank) moved table initialization to function initTable()

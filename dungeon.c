@@ -20,14 +20,7 @@ int main(){
   
   initDungeon(rooms, numRooms);
   
-  for(int i = 0; i < numRooms; i++){
-    // this should assign floor values to the table
-    for (int j = rooms[i].locationY; j < rooms[i].locationY + rooms[i].sizeY; j++) {
-      for (int k = rooms[i].locationX; k < rooms[i].locationX + rooms[i].sizeX; k++) {
-        table[j][k] = 1;
-      }
-    }
-  }
+  initTable(table, rooms, numRooms);
   
   printTable(table);
 }
@@ -79,6 +72,18 @@ void initDungeon(struct room *rooms, int numRooms) {
   printf("Number of loops before dungeon generation: %d\n\n", count);
 }
 
+// initializes the table based on the location of rooms
+void initTable(int table[DUNGEONY][DUNGEONX], struct room *rooms, int numRooms) {
+  for(int i = 0; i < numRooms; i++){
+    // this should assign floor values to the table
+    for (int j = rooms[i].locationY; j < rooms[i].locationY + rooms[i].sizeY; j++) {
+      for (int k = rooms[i].locationX; k < rooms[i].locationX + rooms[i].sizeX; k++) {
+        table[j][k] = 1;
+      }
+    }
+  }
+}
+
 // checks for overlap, returns 1 if overlap occurs
 int twoRoomsCollide(int l1x, int l1y, int r1x, int r1y, int l2x, int l2y, int r2x, int r2y){
   // check if there is at least one gap between rooms
@@ -93,7 +98,7 @@ int twoRoomsCollide(int l1x, int l1y, int r1x, int r1y, int l2x, int l2y, int r2
 
 // for now, these are the values:
 // rock = 0; room floor = 1; corridor floor = 2
-void printTable(int table[21][80]) {
+void printTable(int table[DUNGEONY][DUNGEONX]) {
   for (int i = 0; i < DUNGEONY; i++) {
     for (int j = 0; j < DUNGEONX; j++) {
       if (table[i][j] == 0) {
