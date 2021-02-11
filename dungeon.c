@@ -24,7 +24,7 @@ int main(){
   // initialize the table to represent the dungeon rooms
   initTable(table, rooms, numRooms);
   
-  //initCorridor(table, rooms, numRooms);
+  initCorridor(table, rooms, numRooms);
   
   // place one upward staircase and up to 3 downward staircases
   placeStairs(table, 3);
@@ -173,3 +173,89 @@ void printTable(int table[DUNGEONY][DUNGEONX]) {
   }
 }
 
+void initCorridor(int table[DUNGEONY][DUNGEONX], struct room *rooms, int numRooms){
+  
+  struct node lookedAt[DUNGEONY*DUNGEONX];
+  struct node locations[DUNGEONY*DUNGEONX];
+  
+  int i;
+  int lookedAtIndx = 0;
+  int locationsIndx = 0;
+  int goalx;
+  int goaly;
+  struct node node1 = NULL;
+  struct node node2 = NULL;
+  struct node node3 = NULL;
+  struct node node4 = NULL;
+  struct node node = NULL;
+
+  
+  goalx = rooms[i].locationX;
+  goaly = rooms[i].locationY;
+
+  
+  node1 = (struct node*)malloc(sizeof(struct node));
+  node2 = (struct node*)malloc(sizeof(struct node));
+  node3 = (struct node*)malloc(sizeof(struct node));
+  node4 = (struct node*)malloc(sizeof(struct node));
+  
+  node1 -> x = rooms[i-1].locationX + 1;
+  node1 -> y = rooms[i-1].locationY;
+  node1 -> difficulty = getDifficulty(node1.x, node1.y, table);
+  
+  node2 -> x = rooms[i-1].locationX -1;
+  node2 -> y = rooms[i-1].locationY;
+  node2 -> difficulty = getDifficulty(node2.x, node2.y, table);
+    
+  node3 -> x = rooms[i-1].locationX;
+  node3 -> y = rooms[i-1].locationY +1;
+  node3 -> difficulty = getDifficulty(node3.x, node3.y, table);
+    
+  node4 -> x = rooms[i-1].locationX;
+  node4 -> y = rooms[i-1].locationY -1;
+  node4 -> difficulty = getDifficulty(node4.x, node4.y, table);
+
+  locations[locationsIndx++] = node1;
+  locations[locationsIndx++] = node2;
+  locations[locationsIndx++] = node3;
+  locations[locationsIndx++] = node4;
+  printf("should be 4: %d", locationsIndx);
+
+  while(1){
+    node = locations[--locationsIndx];
+    
+
+
+
+
+  }
+  for(i = 1; i < numRooms; i++){
+    goalx = rooms[i].locationX;
+    goaly = rooms[i].locationY;
+        
+  }
+
+}
+
+
+int getDifficulty(int x, int y, int table[DUNGEONY][DUNGEONX]){
+  if (table[i][j] == 0) {
+    return 10; //stone
+      }
+      else if (table[i][j] == 1) {
+        return 3; //room
+      }
+      else if (table[i][j] == 2) {
+        return 5; //corridor
+      }
+      else if (table[i][j] == 3) {
+        return 3; //stair
+      }
+      else if (table[i][j] == 4) {
+        return 3; //stair
+      }
+      else {
+	return 500; //dont know;
+      }
+
+}
