@@ -18,12 +18,15 @@ int main(){
   int numRooms = 6;
   struct room rooms[numRooms];
   
+  // add rooms to the dungeon
   initDungeon(rooms, numRooms);
   
+  // initialize the table to represent the dungeon rooms
   initTable(table, rooms, numRooms);
   
   //initCorridor(table, rooms, numRooms);
   
+  // place one upward staircase and up to 3 downward staircases
   placeStairs(table, 3);
   
   printTable(table);
@@ -89,6 +92,7 @@ void initTable(int table[DUNGEONY][DUNGEONX], struct room *rooms, int numRooms) 
 }
 
 // calls an additional function to place an upward stair and a number of downward stairs
+// maxStairs represents the maximum possible number of downward stairs (can be fewer than maxStairs)
 void placeStairs(int table[DUNGEONY][DUNGEONX], int maxStairs) {
   // calculate the number of places a stair could be located
   int freeSpace = 0;
@@ -103,7 +107,7 @@ void placeStairs(int table[DUNGEONY][DUNGEONX], int maxStairs) {
   // first place an upward staircase
   putStair(table, 3, freeSpace);
   
-  // next place a number of downward staircases between 1 and maxStairs
+  // next place a number of downward staircases between 1 and maxStairs (inclusive)
   for(int stairCount = rand()%maxStairs + 1; stairCount > 0; stairCount--) {
     freeSpace--; // decrement freeSpace every time a stair is placed
     putStair(table, 4, freeSpace);
