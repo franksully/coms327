@@ -19,4 +19,5 @@ struct stone{
 };
 
 void initDungeon(struct room *rooms, int numRooms);
+int twoRoomsCollide(int l1x, int l1y, int r1x, int r1y, int l2x, int l2y, int r2x, int r2y);
 void printTable(int table[21][80]);
