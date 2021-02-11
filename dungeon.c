@@ -146,7 +146,7 @@ int twoRoomsCollide(int l1x, int l1y, int r1x, int r1y, int l2x, int l2y, int r2
 }
 
 // for now, these are the values:
-// rock = 0; room floor = 1; corridor floor = 2
+// rock = 0; room floor = 1; corridor floor = 2, up stair = 3, down stair = 4
 void printTable(int table[DUNGEONY][DUNGEONX]) {
   for (int i = 0; i < DUNGEONY; i++) {
     for (int j = 0; j < DUNGEONX; j++) {
