@@ -22,6 +22,10 @@ int main(){
   
   initTable(table, rooms, numRooms);
   
+  //initCorridor(table, rooms, numRooms);
+  
+  placeStairs(table, 3);
+  
   printTable(table);
 }
 
@@ -38,8 +42,8 @@ void initDungeon(struct room *rooms, int numRooms) {
   
     for(int i = 0; i < numRooms; i++) {
       // rooms cannot occupy the perimeter of the dungeon
-      // TODO: validate these values
       rooms[i].locationY = rand()%(DUNGEONY - 2) + 1;
+      // e.g. DUNGEONX = 80, indexes 0 -> 79, cannot use 0 or 79 as locations
       rooms[i].locationX = rand()%(DUNGEONX - 2) + 1;
       
       // max sizeY value is 11
@@ -84,6 +88,47 @@ void initTable(int table[DUNGEONY][DUNGEONX], struct room *rooms, int numRooms) 
   }
 }
 
+// calls an additional function to place an upward stair and a number of downward stairs
+void placeStairs(int table[DUNGEONY][DUNGEONX], int maxStairs) {
+  // calculate the number of places a stair could be located
+  int freeSpace = 0;
+  for (int i = 0; i < DUNGEONY; i++) {
+    for (int j = 0; j < DUNGEONX; j++) {
+      if (table[i][j]) {
+        freeSpace++;
+      }
+    }
+  }
+  
+  // first place an upward staircase
+  putStair(table, 3, freeSpace);
+  
+  // next place a number of downward staircases between 1 and maxStairs
+  for(int stairCount = rand()%maxStairs + 1; stairCount > 0; stairCount--) {
+    freeSpace--; // decrement freeSpace every time a stair is placed
+    putStair(table, 4, freeSpace);
+  }
+}
+
+// function that actually places the stair on the table (3 for up, 4 for down)
+void putStair(int table[DUNGEONY][DUNGEONX], int direction, int freeSpace) {
+  int stairLoc = rand()%freeSpace + 1;
+  
+  int currLoc = 0;
+  
+  for (int i = 0; i < DUNGEONY; i++) {
+    for (int j = 0; j < DUNGEONX; j++) {
+      // only valid stair locations are floors (room and corridor)
+      if (table[i][j] == 1 || table[i][j] == 2) {
+        currLoc++;
+        if (currLoc == stairLoc) {
+          table[i][j] = direction;
+        }
+      }
+    }
+  }
+}
+
 // checks for overlap, returns 1 if overlap occurs
 int twoRoomsCollide(int l1x, int l1y, int r1x, int r1y, int l2x, int l2y, int r2x, int r2y){
   // check if there is at least one gap between rooms
@@ -107,8 +152,17 @@ void printTable(int table[DUNGEONY][DUNGEONX]) {
       else if (table[i][j] == 1) {
         printf(".");
       }
-      else {
+      else if (table[i][j] == 2) {
         printf("#");
+      }
+      else if (table[i][j] == 3) {
+        printf("<");
+      }
+      else if (table[i][j] == 4) {
+        printf(">");
+      }
+      else {
+        printf("?");
       }
     }
     printf("\n");
