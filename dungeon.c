@@ -6,7 +6,6 @@
 int main(){
   // arrays are row major
   struct node table[DUNGEONY][DUNGEONX];
-  // TODO: initializes node.status values to 0, make this look pretty? idk
   for (int i = 0; i < DUNGEONY; i++) {
     for (int j = 0; j < DUNGEONX; j++) {
       table[i][j].status = ROCK;
@@ -34,13 +33,10 @@ int main(){
 
 // initializes a dungeon with a set number of rooms
 void initDungeon(struct room *rooms, int numRooms) {
-  int count = 0; // TODO: remove this, counts the number of loops
-
   int pass = 0; // sentinel value for if the dungeon is valid
   
   // loops until a valid combination is found
   while(!pass) {
-    count++;
     pass = 1;
   
     for(int i = 0; i < numRooms; i++) {
@@ -75,8 +71,6 @@ void initDungeon(struct room *rooms, int numRooms) {
       }
     }
   }
-  
-  printf("Number of loops before dungeon generation: %d\n\n", count);
 }
 
 // initializes the table based on the location of rooms
@@ -173,42 +167,37 @@ void printTable(struct node table[DUNGEONY][DUNGEONX]) {
   }
 }
 
+// makes a path between corners of the rooms; column then row
 void initCorridor(struct node table[DUNGEONY][DUNGEONX], struct room *rooms, int numRooms){
-  int j;
-  int k;
   int x;
   int y;
   for(int i = 1; i < numRooms; i++){
     x = rooms[i].locationX - rooms[i-1].locationX;
     y = rooms[i].locationY - rooms[i-1].locationY;
-    if(x < 0){
-      for(j = 0; j > x; j--){
-	if(table[rooms[i-1].locationY][rooms[i-1].locationX+j].status != 1){
-	  table[rooms[i-1].locationY][rooms[i-1].locationX+j].status = 2;
-	}
+    int j = 0;
+    while (j != x) {
+      if(table[rooms[i - 1].locationY][rooms[i - 1].locationX + j].status != ROOM){
+	table[rooms[i - 1].locationY][rooms[i - 1].locationX + j].status = CORR;
       }
-    }else{
-      for(j = 0; j < x; j++){
-	if(table[rooms[i-1].locationY][rooms[i-1].locationX+j].status != 1){
-	  table[rooms[i-1].locationY][rooms[i-1].locationX+j].status = 2;
-	}
+      if (x > 0) {
+        j++;
       }
-    }
-    if(y < 0){
-      for(k = 0; k > y; k--){
-	if(table[rooms[i-1].locationY+k][rooms[i-1].locationX+j].status != 1){
-	  table[rooms[i-1].locationY+k][rooms[i-1].locationX+j].status = 2;
-	}
-      }
-    }else{
-      for(k = 0; k < y; k++){
-	if(table[rooms[i-1].locationY+k][rooms[i-1].locationX+j].status != 1){
-	  table[rooms[i-1].locationY+k][rooms[i-1].locationX+j].status = 2;
-	}
+      else {
+        j--;
       }
     }
-    
-      
+    int k = 0;
+    while (k != y) {
+      if(table[rooms[i - 1].locationY + k][rooms[i - 1].locationX + j].status != ROOM){
+	table[rooms[i - 1].locationY + k][rooms[i - 1].locationX + j].status = CORR;
+      }
+      if (y > 0) {
+        k++;
+      }
+      else {
+        k--;
+      }
+    }
   }
   
 }
@@ -241,7 +230,6 @@ void initCorridor(struct node table[DUNGEONY][DUNGEONX], struct room *rooms, int
     currNode = currNode.prev;
   }
 }
-*/
 
 int getHardness(struct node node) {
   if (node.status == ROCK) {
@@ -257,4 +245,4 @@ int getHardness(struct node node) {
     return 1000;
   }
 }
-
+*/
