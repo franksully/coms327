@@ -1,0 +1,10 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+Array table[][] holds a series of nodes that make up the dungeon. Array rooms[]
+holds structs for the room information. Function prototypes, struct definitions,
+and #define directives are located in the dungeon.h header file. initDungeon()
+initializes the rooms, ensuring they are within bounds and not overlapping.
+initTable() sets the status of the structs based on rooms. initCorridor()
+connects each room via a series of corridors. Stairs are placed at the end and
+can be in rooms or corridors.

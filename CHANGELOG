@@ -6,3 +6,4 @@
 2/11/2021 13:53 ; (Frank) moved table initialization to function initTable()
 2/11/2021 14:05 ; (Amon) added initCorridor() prototype
 2/11/2021 15:23 ; (Frank) added the placement of stairs
+2/11/2021 19:18 ; (Amon) implemented function for adding corridors
