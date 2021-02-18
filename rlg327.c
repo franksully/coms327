@@ -731,8 +731,14 @@ int main(int argc, char *argv[])
 
   UNUSED(in_room);
 
+  char* home = getenv("HOME");
+  char* game_dir = ".rlg327";
+  char* save_file = "dungeon";
+  char* path = malloc((strlen(home) + strlen(game_dir) + strlen(save_file) + 2 + 1) *sizeof(char));
+  sprintf(path, "%s/%s/%s", home, game_dir, save_file);
+  printf("File path: %s\n", path);
   
-  int save = 0;
+  /*int save = 0;
   int load = 0;
   
   if (argc > 1) {
@@ -744,7 +750,7 @@ int main(int argc, char *argv[])
         save = 1;
       }
     }
-  }
+  }*/
   
   gettimeofday(&tv, NULL);
   seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
