@@ -747,24 +747,16 @@ void file_load(dungeon_t *d, char* path) {
   char semantic[13];
   semantic[12] = '\0';
   fread(semantic, 1, 12, f); // offset 0
-  // TODO: remove this
-  printf("%s\n", semantic);
   
   uint32_t version;
   fread(&version, 4, 1, f); // offset 12
   version = be32toh(version);
-  // TODO: remove this
-  printf("%u\n", version);
   uint32_t size;
   fread(&size, 4, 1, f); // offset 16
   size = be32toh(size);
-  // TODO: remove this
-  printf("%u\n", size);
   
   fread(&d->pc.x, 1, 1, f); // offset 20
   fread(&d->pc.y, 1, 1, f);
-  // TODO: remove this
-  printf("%u,%u\n", d->pc.x, d->pc.y);
   
   for (int y = 0; y < DUNGEON_Y; y++) {
     for (int x = 0; x < DUNGEON_X; x++) {
@@ -785,8 +777,6 @@ void file_load(dungeon_t *d, char* path) {
   fread(&num_rooms, 2, 1, f); // offset 1702
   num_rooms = be16toh(num_rooms);
   d->num_rooms = num_rooms;
-  // TODO: remove this
-  printf("%u\n", num_rooms);
   
   for (int i = 0; i < num_rooms; i++) {
     uint8_t posX;
@@ -801,8 +791,6 @@ void file_load(dungeon_t *d, char* path) {
     d->rooms[i].position[dim_y] = posY;
     d->rooms[i].size[dim_x] = sizeX;
     d->rooms[i].size[dim_y] = sizeY;
-    // TODO: remove this
-    printf("Room %u at (%u,%u) with sizes %u by %u\n", i+1,d->rooms[i].position[dim_x],d->rooms[i].position[dim_y],d->rooms[i].size[dim_x],d->rooms[i].size[dim_y]);
   }
   
   // put rooms on map
@@ -855,6 +843,7 @@ int main(int argc, char *argv[])
   char* save_file = "dungeon";
   char* path = malloc((strlen(home) + strlen(game_dir) + strlen(save_file) + 2 + 1) *sizeof(char));
   sprintf(path, "%s/%s/%s", home, game_dir, save_file);
+  // TODO: remove this
   printf("File path: %s\n", path);
   
   int save = 0;
