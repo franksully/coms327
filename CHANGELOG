@@ -1,3 +1,4 @@
+1.01
 2/10/2021 14:00 ; (Amon) began work, added code for filling rooms array
 2/10/2021 21:24 ; (Frank) adjusted values, added function for printing table
 2/10/2021 22:00 ; (Amon) added function for checking room overlaps
@@ -7,7 +8,12 @@
 2/11/2021 14:05 ; (Amon) added initCorridor() prototype
 2/11/2021 15:23 ; (Frank) added the placement of stairs
 2/11/2021 19:18 ; (Amon) implemented function for adding corridors
+
+1.02
 2/18/2021 15:00 ; Replaced code with class sample "rkg327-s2021-1.01"
 2/18/2021 16:00 ; (Amon) began work on file_save() function
 2/18/2021 18:45 ; (Frank) implemented most of file_load() functionality
 2/18/2021 20:09 ; (Frank) added full functionality of file_load()
+2/18/2021 21:00 ; (Amon) finished implementation of file_save()
+2/18/2021 21:20 ; (Amon) fixed file size in file_save()
+2/18/2021 21:30 ; (Frank) added placement of player character

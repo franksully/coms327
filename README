@@ -1,0 +1,12 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+The file_save() function will save a file to a specific path. The contents of
+this file are in line with the specifications of the pdf file. The file_load() 
+function will load from the same place that the file is saved. The flags are
+-s or -save and -l or -load respectively. The place_pc() function will place a 
+player character in a valid location. The player is a struct type with two
+variables for their location. The dungeon struct stores the player inside
+its definition. The render_dungeon() function was modified to also place an '@'
+char at the location where the player should be. Currently, there must be a
+file present in order to load. The file must be in the path specified in main().

@@ -733,12 +733,119 @@ void init_dungeon(dungeon_t *d)
   empty_dungeon(d);
 }
 
-void file_save(dungeon_t *d, char* path) {
-  /*FILE *f = fopen(path, "w");
-  
-  char semantic[13] = "RLG327-S2021";
+void file_save(dungeon_t *d, char* path){
+  FILE *f =  fopen(path,"w");
+  pair_t p;
+  //writes semantic
+  char *semantic = "RLG327-S2021";
   fwrite(semantic, 1, 12, f);
-  fwrite(0, 4, 1, f);*/
+  
+  //writes version
+  uint32_t version = 0;
+  version = htobe32(version);
+  fwrite(&version, 4, 1, f);
+
+  //writes size
+  uint16_t upStairs;
+  uint16_t downStairs;
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      switch (mappair(p)) {
+      case ter_stairs_up:
+	upStairs++;
+        break;
+      case ter_stairs_down:
+	downStairs++;
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  uint16_t numRooms = d->num_rooms;
+  uint32_t size = 1708;
+  size += (int) numRooms*4;
+  size += upStairs * 2;
+  size += downStairs * 2;
+  size = htobe32(size);
+  fwrite(&size, 4, 1, f);
+  
+
+  //writes pair of xy for PC
+  p[dim_x] = d->pc.x;
+  p[dim_y] = d->pc.y;
+  fwrite(&p[dim_x], 1, 1, f);
+  fwrite(&p[dim_y], 1, 1, f);
+  
+  //writes hardness 
+  fwrite(d->hardness, 1, 1680, f);
+
+  //writes num of rooms
+  numRooms = htobe16(numRooms);
+  fwrite(&numRooms, 2, 1, f);
+
+  //writes position of all rooms in dungeon
+  uint8_t x = 0;
+  uint8_t y = 0;
+  uint8_t sizeX = 0;
+  uint8_t sizeY = 0;
+    
+  for(int i = 0; i < d->num_rooms; i++){
+    x = d->rooms[i].position[dim_x];
+    y = d->rooms[i].position[dim_y];
+    sizeX = d->rooms[i].size[dim_x];
+    sizeY = d->rooms[i].size[dim_y];
+    
+    fwrite(&x, 1, 1, f);
+    fwrite(&y, 1, 1, f);
+    fwrite(&sizeX, 1, 1, f);
+    fwrite(&sizeY, 1, 1, f);
+
+  }
+
+  //writes number of upward staircases
+  upStairs = htobe16(upStairs);
+  downStairs = htobe16(downStairs);
+  fwrite(&upStairs, 2, 1, f);
+  //writes location of all upward staircases
+  y = 0;
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    x = 0;
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      switch (mappair(p)) {
+      case ter_stairs_up:
+        fwrite(&x, 1, 1, f);
+	fwrite(&y, 1, 1, f);
+        break;
+      default:
+        break;
+      }
+      x++;
+    }
+    y++;
+  }
+  
+  //writes number of downward staircases
+  fwrite(&downStairs, 2, 1, f);
+  
+  //writes location of all downward staircases
+  y = 0;
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    x = 0;
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      switch (mappair(p)) {
+      case ter_stairs_down:
+        fwrite(&x, 1, 1, f);
+	fwrite(&y, 1, 1, f);
+        break;
+      default:
+        break;
+      }
+      x++;
+    }
+    y++;
+  }
+  fclose(f);
 }
 
 void file_load(dungeon_t *d, char* path) {
@@ -758,11 +865,13 @@ void file_load(dungeon_t *d, char* path) {
   fread(&d->pc.x, 1, 1, f); // offset 20
   fread(&d->pc.y, 1, 1, f);
   
-  for (int y = 0; y < DUNGEON_Y; y++) {
+  fread(&d->hardness, 1, 1680, f); // offset 22
+  
+  /*for (int y = 0; y < DUNGEON_Y; y++) {
     for (int x = 0; x < DUNGEON_X; x++) {
-      fread(&d->hardness[y][x], 1, 1, f); // offset 22
+      
     }
-  }
+  }*/
   
   // set all hardness 0 spaces to corridors
   for (int y = 1; y < DUNGEON_Y - 1; y++) {
@@ -830,6 +939,74 @@ void file_load(dungeon_t *d, char* path) {
   fclose(f);
 }
 
+int place_pc(dungeon_t *d) {
+  // calculate the number of places the pc could be located
+  int free_space = 0;
+  for (int i = 0; i < DUNGEON_Y; i++) {
+    for (int j = 0; j < DUNGEON_X; j++) {
+      switch (d->map[i][j]) {
+      case ter_floor:
+	free_space++;
+        break;
+      case ter_floor_room:
+	free_space++;
+        break;
+      case ter_floor_hall:
+	free_space++;
+        break;
+      case ter_stairs:
+	free_space++;
+        break;
+      case ter_stairs_up:
+	free_space++;
+        break;
+      case ter_stairs_down:
+	free_space++;
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  
+  int pc_loc = rand()%free_space + 1;
+  
+  int curr_loc = 0;
+  for (int i = 0; i < DUNGEON_Y; i++) {
+    for (int j = 0; j < DUNGEON_X; j++) {
+      switch (d->map[i][j]) {
+      case ter_floor:
+	curr_loc++;
+        break;
+      case ter_floor_room:
+	curr_loc++;
+        break;
+      case ter_floor_hall:
+	curr_loc++;
+        break;
+      case ter_stairs:
+	curr_loc++;
+        break;
+      case ter_stairs_up:
+	curr_loc++;
+        break;
+      case ter_stairs_down:
+	curr_loc++;
+        break;
+      default:
+        break;
+      }
+      if (curr_loc == pc_loc) {
+        d->pc.y = i;
+        d->pc.x = j;
+        return 0;
+      }
+    }
+  }
+  
+  return -1;
+}
+
 int main(int argc, char *argv[])
 {
   dungeon_t d;
@@ -843,8 +1020,6 @@ int main(int argc, char *argv[])
   char* save_file = "dungeon";
   char* path = malloc((strlen(home) + strlen(game_dir) + strlen(save_file) + 2 + 1) *sizeof(char));
   sprintf(path, "%s/%s/%s", home, game_dir, save_file);
-  // TODO: remove this
-  printf("File path: %s\n", path);
   
   int save = 0;
   int load = 0;
@@ -869,6 +1044,7 @@ int main(int argc, char *argv[])
   init_dungeon(&d);
   if (load == 0) {
     gen_dungeon(&d);
+    place_pc(&d);
   }
   else {
     file_load(&d, path);
@@ -882,3 +1058,4 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
