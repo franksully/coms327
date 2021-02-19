@@ -767,6 +767,14 @@ void file_load(dungeon_t *d, char* path) {
     }
   }
   
+  for (int y = 1; y < DUNGEON_Y - 1; y++) {
+    for (int x = 1; x < DUNGEON_X -1; x++) {
+      if (d->hardness[y][x] == 0) {
+        mapxy(x,y) = ter_floor_hall;
+      }
+    }
+  }
+  
   
   uint16_t num_rooms;
   fread(&num_rooms, 2, 1, f); // offset 1702
@@ -790,6 +798,18 @@ void file_load(dungeon_t *d, char* path) {
     d->rooms[i].size[dim_y] = sizeY;
     // TODO: remove this
     printf("Room %u at (%u,%u) with sizes %u by %u\n", i+1,d->rooms[i].position[dim_x],d->rooms[i].position[dim_y],d->rooms[i].size[dim_x],d->rooms[i].size[dim_y]);
+  }
+  
+  for (int i = 0; i < num_rooms; i++) {
+    int posY = d->rooms[i].position[dim_y];
+    int sizeY = d->rooms[i].size[dim_y];
+    for (int y = posY; y < posY + sizeY; y++) {
+      int posX = d->rooms[i].position[dim_x];
+      int sizeX = d->rooms[i].size[dim_x];
+      for (int x = posX; x < posX + sizeX; x++) {
+        mapxy(x,y) = ter_floor_room;
+      }
+    }
   }
   
   fclose(f);
@@ -836,25 +856,6 @@ int main(int argc, char *argv[])
   }
   else {
     file_load(&d, "/home/student/Downloads/saved_dungeons/00.rlg327");
-    
-    // set all spaces with hardness == 0 to corridors
-    // will update room spaces later
-    for (int y = 1; y < DUNGEON_Y - 1; y++) {
-      for (int x = 1; x < DUNGEON_X -1; x++) {
-        if (d.hardness[y][x] == 0) {
-          d.map[y][x] = ter_floor_hall;
-        }
-      }
-    }
-    
-    // set the room spaces on the dungeon map
-    for (int i = 0; i < d.num_rooms; i++) {
-      for (int16_t y = d.rooms[i].position[dim_y]; y < d.rooms[i].position[dim_y] + d.rooms[i].size[dim_y]; y++) {
-        for (int16_t x = d.rooms[i].position[dim_x]; x < d.rooms[i].position[dim_x] + d.rooms[i].size[dim_x]; x++) {
-          d.map[y][x] = ter_floor_room;
-        }
-      }
-    }
   }
   render_dungeon(&d);
   
