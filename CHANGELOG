@@ -8,3 +8,5 @@
 2/11/2021 15:23 ; (Frank) added the placement of stairs
 2/11/2021 19:18 ; (Amon) implemented function for adding corridors
 2/18/2021 15:00 ; Replaced code with class sample "rkg327-s2021-1.01"
+2/18/2021 16:00 ; (Amon) began work on file_save() function
+2/18/2021 18:45 ; (Frank) implemented most of file_load() functionality
