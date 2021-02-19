@@ -689,30 +689,35 @@ void render_dungeon(dungeon_t *d)
 
   for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
     for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
-      switch (mappair(p)) {
-      case ter_wall:
-      case ter_wall_immutable:
-        putchar(' ');
-        break;
-      case ter_floor:
-      case ter_floor_room:
-        putchar('.');
-        break;
-      case ter_floor_hall:
-        putchar('#');
-        break;
-      case ter_debug:
-        putchar('*');
-        fprintf(stderr, "Debug character at %d, %d\n", p[dim_y], p[dim_x]);
-        break;
-      case ter_stairs_up:
-        putchar('<');
-        break;
-      case ter_stairs_down:
-        putchar('>');
-        break;
-      default:
-        break;
+      if (d->pc.x == p[dim_x] && d->pc.y == p[dim_y]) {
+      	putchar('@');
+      }
+      else {
+        switch (mappair(p)) {
+        case ter_wall:
+        case ter_wall_immutable:
+          putchar(' ');
+          break;
+        case ter_floor:
+        case ter_floor_room:
+          putchar('.');
+          break;
+        case ter_floor_hall:
+          putchar('#');
+          break;
+        case ter_debug:
+          putchar('*');
+          fprintf(stderr, "Debug character at %d, %d\n", p[dim_y], p[dim_x]);
+          break;
+        case ter_stairs_up:
+          putchar('<');
+          break;
+        case ter_stairs_down:
+          putchar('>');
+          break;
+        default:
+          break;
+        }
       }
     }
     putchar('\n');
@@ -767,6 +772,7 @@ void file_load(dungeon_t *d, char* path) {
     }
   }
   
+  // set all hardness 0 spaces to corridors
   for (int y = 1; y < DUNGEON_Y - 1; y++) {
     for (int x = 1; x < DUNGEON_X -1; x++) {
       if (d->hardness[y][x] == 0) {
@@ -774,7 +780,6 @@ void file_load(dungeon_t *d, char* path) {
       }
     }
   }
-  
   
   uint16_t num_rooms;
   fread(&num_rooms, 2, 1, f); // offset 1702
@@ -800,6 +805,7 @@ void file_load(dungeon_t *d, char* path) {
     printf("Room %u at (%u,%u) with sizes %u by %u\n", i+1,d->rooms[i].position[dim_x],d->rooms[i].position[dim_y],d->rooms[i].size[dim_x],d->rooms[i].size[dim_y]);
   }
   
+  // put rooms on map
   for (int i = 0; i < num_rooms; i++) {
     int posY = d->rooms[i].position[dim_y];
     int sizeY = d->rooms[i].size[dim_y];
@@ -810,6 +816,27 @@ void file_load(dungeon_t *d, char* path) {
         mapxy(x,y) = ter_floor_room;
       }
     }
+  }
+  
+  uint16_t stairs;
+  fread(&stairs, 2, 1, f);
+  stairs = be16toh(stairs);
+  
+  for(int i = 0; i < stairs; i++) {
+    uint8_t x,y;
+    fread(&x, 1, 1, f);
+    fread(&y, 1, 1, f);
+    mapxy(x,y) = ter_stairs_up;
+  }
+  
+  fread(&stairs, 2, 1, f);
+  stairs = be16toh(stairs);
+  
+  for(int i = 0; i < stairs; i++) {
+    uint8_t x,y;
+    fread(&x, 1, 1, f);
+    fread(&y, 1, 1, f);
+    mapxy(x,y) = ter_stairs_down;
   }
   
   fclose(f);
@@ -855,7 +882,7 @@ int main(int argc, char *argv[])
     gen_dungeon(&d);
   }
   else {
-    file_load(&d, "/home/student/Downloads/saved_dungeons/00.rlg327");
+    file_load(&d, path);
   }
   render_dungeon(&d);
   
