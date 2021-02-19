@@ -72,6 +72,10 @@ typedef struct room {
   pair_t size;
 } room_t;
 
+typedef struct pc {
+  uint8_t x,y;
+} pc_t;
+
 typedef struct dungeon {
   uint32_t num_rooms;
   room_t rooms[MAX_ROOMS];
@@ -84,6 +88,7 @@ typedef struct dungeon {
    * that structure.  Pathfinding will require efficient use of the map,  *
    * and pulling in unnecessary data with each map cell would add a lot   *
    * of overhead to the memory system.                                    */
+  pc_t pc;
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
 } dungeon_t;
 
@@ -723,6 +728,73 @@ void init_dungeon(dungeon_t *d)
   empty_dungeon(d);
 }
 
+void file_save(dungeon_t *d, char* path) {
+  /*FILE *f = fopen(path, "w");
+  
+  char semantic[13] = "RLG327-S2021";
+  fwrite(semantic, 1, 12, f);
+  fwrite(0, 4, 1, f);*/
+}
+
+void file_load(dungeon_t *d, char* path) {
+  FILE *f = fopen(path, "r");
+  
+  char semantic[13];
+  semantic[12] = '\0';
+  fread(semantic, 1, 12, f); // offset 0
+  // TODO: remove this
+  printf("%s\n", semantic);
+  
+  uint32_t version;
+  fread(&version, 4, 1, f); // offset 12
+  version = be32toh(version);
+  // TODO: remove this
+  printf("%u\n", version);
+  uint32_t size;
+  fread(&size, 4, 1, f); // offset 16
+  size = be32toh(size);
+  // TODO: remove this
+  printf("%u\n", size);
+  
+  fread(&d->pc.x, 1, 1, f); // offset 20
+  fread(&d->pc.y, 1, 1, f);
+  // TODO: remove this
+  printf("%u,%u\n", d->pc.x, d->pc.y);
+  
+  for (int y = 0; y < DUNGEON_Y; y++) {
+    for (int x = 0; x < DUNGEON_X; x++) {
+      fread(&d->hardness[y][x], 1, 1, f); // offset 22
+    }
+  }
+  
+  
+  uint16_t num_rooms;
+  fread(&num_rooms, 2, 1, f); // offset 1702
+  num_rooms = be16toh(num_rooms);
+  d->num_rooms = num_rooms;
+  // TODO: remove this
+  printf("%u\n", num_rooms);
+  
+  for (int i = 0; i < num_rooms; i++) {
+    uint8_t posX;
+    uint8_t posY;
+    uint8_t sizeX;
+    uint8_t sizeY;
+    fread(&posX, 1, 1, f);
+    fread(&posY, 1, 1, f);
+    fread(&sizeX, 1, 1, f);
+    fread(&sizeY, 1, 1, f);
+    d->rooms[i].position[dim_x] = posX;
+    d->rooms[i].position[dim_y] = posY;
+    d->rooms[i].size[dim_x] = sizeX;
+    d->rooms[i].size[dim_y] = sizeY;
+    // TODO: remove this
+    printf("Room %u at (%u,%u) with sizes %u by %u\n", i+1,d->rooms[i].position[dim_x],d->rooms[i].position[dim_y],d->rooms[i].size[dim_x],d->rooms[i].size[dim_y]);
+  }
+  
+  fclose(f);
+}
+
 int main(int argc, char *argv[])
 {
   dungeon_t d;
@@ -738,7 +810,7 @@ int main(int argc, char *argv[])
   sprintf(path, "%s/%s/%s", home, game_dir, save_file);
   printf("File path: %s\n", path);
   
-  /*int save = 0;
+  int save = 0;
   int load = 0;
   
   if (argc > 1) {
@@ -750,7 +822,7 @@ int main(int argc, char *argv[])
         save = 1;
       }
     }
-  }*/
+  }
   
   gettimeofday(&tv, NULL);
   seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
@@ -759,8 +831,36 @@ int main(int argc, char *argv[])
   srand(seed);
 
   init_dungeon(&d);
-  gen_dungeon(&d);
+  if (load == 0) {
+    gen_dungeon(&d);
+  }
+  else {
+    file_load(&d, "/home/student/Downloads/saved_dungeons/00.rlg327");
+    
+    // set all spaces with hardness == 0 to corridors
+    // will update room spaces later
+    for (int y = 1; y < DUNGEON_Y - 1; y++) {
+      for (int x = 1; x < DUNGEON_X -1; x++) {
+        if (d.hardness[y][x] == 0) {
+          d.map[y][x] = ter_floor_hall;
+        }
+      }
+    }
+    
+    // set the room spaces on the dungeon map
+    for (int i = 0; i < d.num_rooms; i++) {
+      for (int16_t y = d.rooms[i].position[dim_y]; y < d.rooms[i].position[dim_y] + d.rooms[i].size[dim_y]; y++) {
+        for (int16_t x = d.rooms[i].position[dim_x]; x < d.rooms[i].position[dim_x] + d.rooms[i].size[dim_x]; x++) {
+          d.map[y][x] = ter_floor_room;
+        }
+      }
+    }
+  }
   render_dungeon(&d);
+  
+  if (save != 0) {
+    file_save(&d, path);
+  }
   delete_dungeon(&d);
 
   return 0;
