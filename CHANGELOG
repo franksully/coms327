@@ -25,3 +25,5 @@
 2/25/2021 13:30 ; (Amon) began work in dijkstra_monster_dig()
 2/25/2021 15:20 ; (Frank) added functions for displaying both distance maps
 2/25/2021 15:40 ; (Amon) corrected function for displaying non-tunneling map
+2/25/2021 16:30 ; (Frank) corrected values for comparisons in Dijkstra algorithm
+

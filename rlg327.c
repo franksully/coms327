@@ -191,7 +191,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
     // x, y-1
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x]    ].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x]    ].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x, y-1\n");
       path[p->pos[dim_y] - 1][p->pos[dim_x]    ].cost =
         p->cost + 1;
@@ -202,7 +202,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x-1, y
     if ((path[p->pos[dim_y]    ][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y]    ][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x-1, y\n");
       path[p->pos[dim_y]    ][p->pos[dim_x] - 1].cost =
         p->cost + 1;
@@ -213,7 +213,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x+1, y
     if ((path[p->pos[dim_y]    ][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y]    ][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x+1, y\n");
       path[p->pos[dim_y]    ][p->pos[dim_x] + 1].cost =
         p->cost + 1;
@@ -224,7 +224,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x]    ].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x]    ].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x]    ].cost =
         p->cost + 1;
@@ -235,7 +235,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x+1, y-1
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x+1, y-1\n");
       path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].cost =
         p->cost + 1;
@@ -246,7 +246,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x-1, y-1
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x-1, y-1\n");
       path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].cost =
         p->cost + 1;
@@ -257,7 +257,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x+1, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x+1, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].cost =
         p->cost + 1;
@@ -268,7 +268,7 @@ static void dijkstra_monster_nodig(dungeon_t *d) {
 		// x-1, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + 1)) {
 					 //printf("x-1, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].cost =
         p->cost + 1;
@@ -347,7 +347,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
     //printf("hello? %d\n",hardnesspair(p->pos));
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x]    ].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x]    ].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x, y-1\n");
 	
       path[p->pos[dim_y] - 1][p->pos[dim_x]    ].cost = p->cost + costIncrement;
@@ -358,7 +358,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x-1, y
     if ((path[p->pos[dim_y]    ][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y]    ][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x-1, y\n");
       path[p->pos[dim_y]][p->pos[dim_x] - 1].cost = p->cost + costIncrement;
       heap_decrease_key_no_replace(&h, path[p->pos[dim_y]    ]
@@ -368,7 +368,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x+1, y
     if ((path[p->pos[dim_y]    ][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y]    ][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x+1, y\n");
       path[p->pos[dim_y]    ][p->pos[dim_x] + 1].cost =
         p->cost + costIncrement;
@@ -379,7 +379,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x]    ].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x]    ].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x]    ].cost =
         p->cost + costIncrement;
@@ -390,7 +390,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x+1, y-1
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x+1, y-1\n");
       path[p->pos[dim_y] - 1][p->pos[dim_x] + 1].cost =
         p->cost + costIncrement;
@@ -401,7 +401,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x-1, y-1
     if ((path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x-1, y-1\n");
       path[p->pos[dim_y] - 1][p->pos[dim_x] - 1].cost =
         p->cost + costIncrement;
@@ -412,7 +412,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x+1, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x+1, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x] + 1].cost =
         p->cost + costIncrement;
@@ -423,7 +423,7 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		// x-1, y+1
     if ((path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].hn) &&
         (path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].cost >
-         p->cost + hardnesspair(p->pos))) {
+         p->cost + costIncrement)) {
 					 //printf("x-1, y+1\n");
       path[p->pos[dim_y] + 1][p->pos[dim_x] - 1].cost =
         p->cost + costIncrement;
