@@ -68,6 +68,7 @@ typedef int8_t pair_t[num_dims];
 #define hardnesspair(pair) (d->hardness[pair[dim_y]][pair[dim_x]])
 #define hardnessxy(x, y) (d->hardness[y][x])
 #define distance1xy(x, y) (d->distance_map_1[y][x])
+#define distance2xy(x, y) (d->distance_map_2[y][x])
 
 typedef enum __attribute__ ((__packed__)) terrain_type {
   ter_debug,
@@ -100,7 +101,8 @@ typedef struct dungeon {
    * of overhead to the memory system.                                    */
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
   pair_t pc;
-	int32_t distance_map_1[DUNGEON_Y][DUNGEON_X];
+	int32_t distance_map_1[DUNGEON_Y][DUNGEON_X]; // non-tunneling
+	int32_t distance_map_2[DUNGEON_Y][DUNGEON_X]; // tunneling
 } dungeon_t;
 
 static uint32_t in_room(dungeon_t *d, int16_t y, int16_t x)
@@ -305,9 +307,9 @@ static void dijkstra_monster_dig(dungeon_t *d) {
   }
   
   for (int y = 0; y < DUNGEON_Y; y++) {
-	for (int x = 0; x < DUNGEON_X; x++) {
-		distance1xy(x, y) = INT_MAX;
-	}
+		for (int x = 0; x < DUNGEON_X; x++) {
+			distance2xy(x, y) = INT_MAX;
+		}
   }
 	
   for (y = 0; y < DUNGEON_Y; y++) {
@@ -434,9 +436,9 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 	// update distance map
 	for (int y = 0; y < DUNGEON_Y; y++) {
 		for (int x = 0; x < DUNGEON_X; x++) {
-			if (mapxy(x, y) != ter_wall_immutable && mapxy(x, y) != ter_wall) {
+			if (mapxy(x, y) != ter_wall_immutable) {
 				//printf("x:%d y:%d cost:%d\n", x, y, path[y][x].cost);
-			  distance1xy(x, y) = path[y][x].cost;
+			  distance2xy(x, y) = path[y][x].cost;
 			}
 		}
 	}
@@ -1544,7 +1546,7 @@ void usage(char *name)
   exit(-1);
 }
 
-void render_distance(dungeon_t *d)
+void render_distance_1(dungeon_t *d)
 {
   pair_t p;
 	
@@ -1554,17 +1556,34 @@ void render_distance(dungeon_t *d)
         putchar('@');
       } else {
 	if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable && mapxy(p[dim_x], p[dim_y]) != ter_wall) {
-		if(distance1xy(p[dim_x],p[dim_y]) == INT_MAX){
-			printf("X");
-		}else{		
-			printf("%d", distance1xy(p[dim_x],p[dim_y]) % 10);
-		}
+		printf("%d", distance1xy(p[dim_x],p[dim_y]) % 10);
 	}
 	else {
 		printf(" ");
 	}
       }
     }
+    putchar('\n');
+  }
+}
+
+void render_distance_2(dungeon_t *d)
+{
+  pair_t p;
+	
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      if (d->pc[dim_x] == p[dim_x] && d->pc[dim_y] == p[dim_y]) {
+        putchar('@');
+      } else {	
+				if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable) {
+					printf("%d", distance2xy(p[dim_x],p[dim_y]) % 10);
+				}
+				else {
+					printf(" ");
+				}
+			}
+		}
     putchar('\n');
   }
 }
@@ -1706,9 +1725,9 @@ int main(int argc, char *argv[])
   render_dungeon(&d);
 	
 	dijkstra_monster_nodig(&d);
-	render_distance(&d);
+	render_distance_1(&d);
 	dijkstra_monster_dig(&d);
-	render_distance(&d);
+	render_distance_2(&d);
 
   if (do_save) {
     if (do_save_seed) {
