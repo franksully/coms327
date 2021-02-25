@@ -443,8 +443,8 @@ static void dijkstra_monster_dig(dungeon_t *d) {
 		}
 	}
 }
-static void dijkstra_corridor(dungeon_t *d, pair_t from, pair_t to)
-{
+
+static void dijkstra_corridor(dungeon_t *d, pair_t from, pair_t to) {
   static corridor_path_t path[DUNGEON_Y][DUNGEON_X], *p;
   static uint32_t initialized = 0;
   heap_t h;
@@ -1555,11 +1555,16 @@ void render_distance_1(dungeon_t *d)
       if (d->pc[dim_x] == p[dim_x] && d->pc[dim_y] == p[dim_y]) {
         putchar('@');
       } else {
-	if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable && mapxy(p[dim_x], p[dim_y]) != ter_wall) {
-		printf("%d", distance1xy(p[dim_x],p[dim_y]) % 10);
-	}
-	else {
-		printf(" ");
+					if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable && mapxy(p[dim_x], p[dim_y]) != ter_wall) {
+						if (distance1xy(p[dim_x],p[dim_y]) == INT_MAX) {
+							printf("X");
+						}
+						else {
+							printf("%d", distance1xy(p[dim_x],p[dim_y]) % 10);
+						}
+					}
+					else {
+						printf(" ");
 	}
       }
     }
@@ -1576,13 +1581,13 @@ void render_distance_2(dungeon_t *d)
       if (d->pc[dim_x] == p[dim_x] && d->pc[dim_y] == p[dim_y]) {
         putchar('@');
       } else {	
-				if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable) {
-					printf("%d", distance2xy(p[dim_x],p[dim_y]) % 10);
+					if (mapxy(p[dim_x], p[dim_y]) != ter_wall_immutable) {
+						printf("%d", distance2xy(p[dim_x],p[dim_y]) % 10);
+					}
+					else {
+						printf(" ");
+					}
 				}
-				else {
-					printf(" ");
-				}
-			}
 		}
     putchar('\n');
   }

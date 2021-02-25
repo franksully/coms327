@@ -1,0 +1,12 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+The dungeon has two distance maps; one for non-tunneling monsters and another
+for tunneling monsters. The functions dijkstra_monster_nodig() and
+dijkstra_monster_dig() take one parameter (the dungeon) and modify their
+respective distance maps. The maps are then printed using render_distance_1()
+and render_distance_2() respectively. The distance maps are created using an
+implementation of Dijkstra's algorithm to calculate the shortest distance (or
+close enough to it) from the player to each valid cell on the map. If a cell for
+non-tunneling monsters cannot be reached, it is instead represented with an 'X'
+(see adventure.rlg327).
