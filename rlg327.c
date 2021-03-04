@@ -145,23 +145,25 @@ int main(int argc, char *argv[])
 
   if (!do_load) {
     /* Set a valid position for the PC */
-    d.pc.position[dim_x] = (d.rooms[0].position[dim_x] +
+    d.player.position[dim_x] = (d.rooms[0].position[dim_x] +
                             (rand() % d.rooms[0].size[dim_x]));
-    d.pc.position[dim_y] = (d.rooms[0].position[dim_y] +
+    d.player.position[dim_y] = (d.rooms[0].position[dim_y] +
                             (rand() % d.rooms[0].size[dim_y]));
   }
 
   printf("PC is at (y, x): %d, %d\n",
-         d.pc.position[dim_y], d.pc.position[dim_x]);
+         d.player.position[dim_y], d.player.position[dim_x]);
+				 
+	init_characters(&d, 10);
 
   render_dungeon(&d);
 
   dijkstra(&d);
   dijkstra_tunnel(&d);
-  render_distance_map(&d);
-  render_tunnel_distance_map(&d);
-  render_hardness_map(&d);
-  render_movement_cost_map(&d);
+  //render_distance_map(&d);
+  //render_tunnel_distance_map(&d);
+  //render_hardness_map(&d);
+  //render_movement_cost_map(&d);
 
   if (do_save) {
     if (do_save_seed) {

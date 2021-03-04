@@ -40,8 +40,24 @@ typedef struct room {
 } room_t;
 
 typedef struct pc {
-  pair_t position;
+  
 } pc_t;
+
+typedef struct monster {
+	
+} monster_t;
+
+typedef struct character {
+	pair_t position;
+	//uint8_t speed;
+	//uint8_t next_turn;
+	//uint8_t is_alive;
+	uint8_t is_player;
+	union {
+		pc_t pc;
+		monster_t monster;
+	};
+} character_t;
 
 typedef struct dungeon {
   uint32_t num_rooms;
@@ -58,10 +74,14 @@ typedef struct dungeon {
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_distance[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_tunnel[DUNGEON_Y][DUNGEON_X];
-  pc_t pc;
+	
+	character_t *character_map[DUNGEON_Y][DUNGEON_X];
+	character_t player;
+
 } dungeon_t;
 
 void init_dungeon(dungeon_t *d);
+void init_characters(dungeon_t *d, int num_mon);
 void delete_dungeon(dungeon_t *d);
 int gen_dungeon(dungeon_t *d);
 void render_dungeon(dungeon_t *d);
