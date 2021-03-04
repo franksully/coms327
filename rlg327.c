@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
   uint32_t i;
   uint32_t do_load, do_save, do_seed, do_image, do_save_seed, do_save_image;
   uint32_t long_arg;
+	uint32_t numMonsters = 10;
   char *save_file;
   char *load_file;
   char *pgm_file;
@@ -114,6 +115,10 @@ int main(int argc, char *argv[])
             pgm_file = argv[++i];
           }
           break;
+					case 'n':
+            numMonsters = atoi(argv[++i]); //increment before getting value
+            printf("numMonsters = %d\n", numMonsters);
+            break;
         default:
           usage(argv[0]);
         }
@@ -151,10 +156,12 @@ int main(int argc, char *argv[])
                             (rand() % d.rooms[0].size[dim_y]));
   }
 
+	gen_monsters(&d,numMonsters);
+
   printf("PC is at (y, x): %d, %d\n",
          d.player.position[dim_y], d.player.position[dim_x]);
 				 
-	init_characters(&d, 10);
+	init_characters(&d, numMonsters);
 
   render_dungeon(&d);
 

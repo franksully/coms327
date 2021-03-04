@@ -1271,3 +1271,25 @@ void render_tunnel_distance_map(dungeon_t *d)
     putchar('\n');
   }
 }
+
+ void gen_monsters(dungeon_t *d, int numMonsters)
+{/*
+  int intelligence;
+  int telepathy;
+  int tunneling;
+  int erratic;
+  for(int i = 0; i < numMonsters; i++){
+    intelligence = rand()%2;
+    telepathy = rand()%2;
+    tunneling = rand()%2;
+    erratic = rand()%2;
+    intelligence * 1 + telepathy * 2 + tunneling * 4 + erratic * 8;
+    
+    if(!intelligence && !telepathy && !tunneling && !erratic){
+    
+    */
+    //return;
+  
+   
+  
+}
