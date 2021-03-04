@@ -1,0 +1,5 @@
+3/2/2021 16:00 ; (Frank) modified structs in dungeon.h
+3/4/2021 14:00 ; (Amon) added tag for --nummon
+3/4/2021 15:00 ; (Frank) added init_characters() function
+3/4/2021 15:30 ; (Amon) added loop for each turn
+3/4/2021 16:00 ; (Frank) modified render_dungeon() to show pc and npcs
