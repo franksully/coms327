@@ -44,14 +44,15 @@ typedef struct pc {
 } pc_t;
 
 typedef struct monster {
-	
+	int id;
 } monster_t;
 
 typedef struct character {
 	pair_t position;
-	//uint8_t speed;
-	//uint8_t next_turn;
-	//uint8_t is_alive;
+	uint8_t speed;
+	uint8_t next_turn;
+	uint8_t is_alive;
+	
 	uint8_t is_player;
 	union {
 		pc_t pc;

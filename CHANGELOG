@@ -3,3 +3,5 @@
 3/4/2021 15:00 ; (Frank) added init_characters() function
 3/4/2021 15:30 ; (Amon) added loop for each turn
 3/4/2021 16:00 ; (Frank) modified render_dungeon() to show pc and npcs
+3/4/2021 17:00 ; (Amon) added IDs to monster initialization
+3/4/2021 17:40 ; (Frank) modified render_dungeon() to represent IDs

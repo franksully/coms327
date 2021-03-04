@@ -631,7 +631,8 @@ void render_dungeon(dungeon_t *d)
 					putchar('@');
 				}
 				else {
-					putchar('M');
+					printf("%x", (int) d->character_map[p[dim_y]][p[dim_x]]->monster.id);
+					//putchar('M');
 				}
       } else {
         switch (mappair(p)) {
@@ -684,6 +685,9 @@ void init_characters(dungeon_t *d, int num_mon)
 	}
 	
 	d->player.is_player = 1;
+	d->player.speed = 10;
+	d->player.next_turn = 1000/(d->player.speed);
+	d->player.is_alive = 1;
 	
 	d->character_map[d->player.position[dim_y]][d->player.position[dim_x]] = &(d->player);
 	
@@ -696,7 +700,19 @@ void init_characters(dungeon_t *d, int num_mon)
 			character_t *new_mon = (character_t *) malloc(sizeof(character_t));
 			new_mon->is_player = 0;
 			monster_t mon_union;
+			
+			new_mon->speed = rand()%16 + 5;
+			new_mon->next_turn = 1000/(new_mon->speed);
+			new_mon->is_alive = 1;
+			
+			int intelligence = rand()%2;
+			int telepathy = rand()%2;
+			int tunneling = rand()%2;
+			int erratic = rand()%2;
+			mon_union.id = intelligence*1 + telepathy*2 + tunneling*4 + erratic*8;
+			
 			new_mon->monster = mon_union;
+			
 			d->character_map[y][x] = new_mon;
 			mon_count++;
 		}
