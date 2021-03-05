@@ -49,6 +49,7 @@ typedef struct monster {
 
 typedef struct character {
 	pair_t position;
+	heap_node_t *hn;
 	uint8_t speed;
 	uint8_t next_turn;
 	uint8_t is_alive;
@@ -93,6 +94,7 @@ void render_distance_map(dungeon_t *d);
 void render_tunnel_distance_map(dungeon_t *d);
 void render_hardness_map(dungeon_t *d);
 void render_movement_cost_map(dungeon_t *d);
-void gen_monsters(dungeon_t *d, int numMonsters);
+void update_dungeon(dungeon_t *d, heap_t *heap);
+int32_t character_cmp(const void *key, const void *with);
 
 #endif

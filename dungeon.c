@@ -1288,24 +1288,24 @@ void render_tunnel_distance_map(dungeon_t *d)
   }
 }
 
- void gen_monsters(dungeon_t *d, int numMonsters)
-{/*
-  int intelligence;
-  int telepathy;
-  int tunneling;
-  int erratic;
-  for(int i = 0; i < numMonsters; i++){
-    intelligence = rand()%2;
-    telepathy = rand()%2;
-    tunneling = rand()%2;
-    erratic = rand()%2;
-    intelligence * 1 + telepathy * 2 + tunneling * 4 + erratic * 8;
-    
-    if(!intelligence && !telepathy && !tunneling && !erratic){
-    
-    */
-    //return;
-  
-   
-  
+void update_dungeon(dungeon_t *d, heap_t *heap){
+
+	
+
+
+
+
+
+
+
+
 }
+
+
+
+int32_t character_cmp(const void *key, const void *with) {
+  return ((character_t *) key)->next_turn - ((character_t *) with)->next_turn;
+}
+
+
+

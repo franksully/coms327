@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "dungeon.h"
 #include "path.h"
@@ -156,15 +157,32 @@ int main(int argc, char *argv[])
                             (rand() % d.rooms[0].size[dim_y]));
   }
 
-	gen_monsters(&d,numMonsters);
+
 
   printf("PC is at (y, x): %d, %d\n",
          d.player.position[dim_y], d.player.position[dim_x]);
+         
+	heap_t heap;
+	heap_init(&heap, character_cmp, NULL);
 				 
 	init_characters(&d, numMonsters);
-
-  render_dungeon(&d);
-
+	pair_t p;
+	for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      if (d.character_map[p[dim_y]][p[dim_x]]) {
+				d.character_map[p[dim_y]][p[dim_x]]->next_turn = 1000/d.character_map[p[dim_y]][p[dim_x]]->speed;
+				d.character_map[p[dim_y]][p[dim_x]]->hn = heap_insert(&heap, d.character_map[p[dim_y]][p[dim_x]]);
+      }
+    }
+	}
+	
+	
+	while(d.player.is_alive){
+  	render_dungeon(&d);
+  	update_dungeon(&d, &heap);
+		usleep(1000000);
+	}
+  
   dijkstra(&d);
   dijkstra_tunnel(&d);
   //render_distance_map(&d);
