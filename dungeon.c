@@ -1295,7 +1295,7 @@ void render_tunnel_distance_map(dungeon_t *d)
 
 void move(dungeon_t *d, heap_t *heap, character_t *mon){
 	if(mon->is_player){
-		printf("my turn :(");
+		//printf("my turn :(");
 		mon->next_turn += (1000/ mon->speed);
 
 		heap_insert(heap, mon);
@@ -1387,7 +1387,7 @@ void move(dungeon_t *d, heap_t *heap, character_t *mon){
 		//printf("x:%d\n", x);
 		//printf("y:%d\n", y);
 		//printf("turn:%d\n", mon->next_turn);
-		mon->next_turn +=(1000/ mon->speed);
+		mon->next_turn += (1000/ mon->speed);
 		//mon -> hn = heap_insert(heap, mon);
 		heap_insert(heap, mon);
 	
