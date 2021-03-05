@@ -94,7 +94,7 @@ void render_distance_map(dungeon_t *d);
 void render_tunnel_distance_map(dungeon_t *d);
 void render_hardness_map(dungeon_t *d);
 void render_movement_cost_map(dungeon_t *d);
-void update_dungeon(dungeon_t *d, heap_t *heap);
+void move(dungeon_t *d, heap_t *heap, character_t *mon);
 int32_t character_cmp(const void *key, const void *with);
 
 #endif

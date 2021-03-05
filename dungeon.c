@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <errno.h>
 
+#include "path.h"
 #include "heap.h"
 #include "dungeon.h"
 #include "utils.h"
@@ -678,6 +679,7 @@ void init_dungeon(dungeon_t *d)
 
 void init_characters(dungeon_t *d, int num_mon)
 {
+	
 	for (int y = 0; y < DUNGEON_Y; y++) {
 		for (int x = 0; x < DUNGEON_X; x++) {
 			d->character_map[y][x] = NULL;
@@ -712,6 +714,9 @@ void init_characters(dungeon_t *d, int num_mon)
 			mon_union.id = intelligence*1 + telepathy*2 + tunneling*4 + erratic*8;
 			
 			new_mon->monster = mon_union;
+			
+			new_mon->position[dim_x] = x;
+			new_mon->position[dim_y] = y;
 			
 			d->character_map[y][x] = new_mon;
 			mon_count++;
@@ -1288,17 +1293,104 @@ void render_tunnel_distance_map(dungeon_t *d)
   }
 }
 
-void update_dungeon(dungeon_t *d, heap_t *heap){
+void move(dungeon_t *d, heap_t *heap, character_t *mon){
+	if(mon->is_player){
+		return;
+	}
+	if(mon->monster.id > 7){
 
 	
-
-
-
-
-
-
-
-
+		
+		uint8_t lowest = d->pc_tunnel[mon->position[dim_y]][mon->position[dim_x]];
+		//printf("%d\n", lowest);
+		//printf("%d\n", mon->position[dim_y]);
+		//printf("%d\n", mon->position[dim_x]);
+		uint8_t y = mon->position[dim_y];
+		uint8_t x = mon->position[dim_x];
+		//printf("x:%d\n", x);
+		//printf("y:%d\n", y);
+		//printf("%d,%d\n", mon->position[dim_y], mon->position[dim_x]);
+		d->character_map[y][x] = NULL;
+		
+		for(int i = -1; i < 2; i++){
+			for(int j = -1; j < 2; j++){
+				if(lowest > d->pc_tunnel[mon->position[dim_y]+ i][mon->position[dim_x]+ j]){
+					//printf("x ");
+					y = mon->position[dim_y] + i;
+					x = mon->position[dim_x] + j;
+				}
+			}
+		}
+		mon->position[dim_y] = y;
+		mon->position[dim_x] = x;
+		
+		if(d->hardness[y][x] != 0){
+			if(d->hardness[y][x] <= 85){
+				d->hardness[y][x] = 0;
+				d->map[y][x] = ter_floor_hall;
+				dijkstra(d);
+				dijkstra_tunnel(d);
+			}else{
+				d->hardness[y][x] -= 85;
+				dijkstra_tunnel(d);
+			}
+		
+		}
+		//printf("%d,%d\n", mon->position[dim_y], mon->position[dim_x]);
+		d->character_map[y][x] = mon;
+		//printf("x:%d\n", x);
+		//printf("y:%d\n", y);
+		//printf("turn:%d\n", mon->next_turn);
+		mon->next_turn +=(1000/ mon->speed);
+		//mon -> hn = heap_insert(heap, mon);
+		heap_insert(heap, mon);
+	}else{
+			uint8_t lowest = d->pc_distance[mon->position[dim_y]][mon->position[dim_x]];
+		//printf("%d\n", lowest);
+		//printf("%d\n", mon->position[dim_y]);
+		//printf("%d\n", mon->position[dim_x]);
+		uint8_t y = mon->position[dim_y];
+		uint8_t x = mon->position[dim_x];
+		//printf("x:%d\n", x);
+		//printf("y:%d\n", y);
+		//printf("%d,%d\n", mon->position[dim_y], mon->position[dim_x]);
+		d->character_map[y][x] = NULL;
+		
+		for(int i = -1; i < 2; i++){
+			for(int j = -1; j < 2; j++){
+				if(lowest > d->pc_distance[mon->position[dim_y]+ i][mon->position[dim_x]+ j]){
+					//printf("x ");
+					y = mon->position[dim_y] + i;
+					x = mon->position[dim_x] + j;
+				}
+			}
+		}
+		mon->position[dim_y] = y;
+		mon->position[dim_x] = x;
+		
+		if(d->hardness[y][x] != 0){
+			if(d->hardness[y][x] <= 85){
+				d->hardness[y][x] = 0;
+				d->map[y][x] = ter_floor_hall;
+				dijkstra(d);
+				dijkstra_tunnel(d);
+			}else{
+				d->hardness[y][x] -= 85;
+				dijkstra_tunnel(d);
+			}
+		
+		}
+		//printf("%d,%d\n", mon->position[dim_y], mon->position[dim_x]);
+		d->character_map[y][x] = mon;
+		//printf("x:%d\n", x);
+		//printf("y:%d\n", y);
+		//printf("turn:%d\n", mon->next_turn);
+		mon->next_turn +=(1000/ mon->speed);
+		//mon -> hn = heap_insert(heap, mon);
+		heap_insert(heap, mon);
+	
+	}
+	
 }
 
 

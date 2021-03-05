@@ -175,16 +175,33 @@ int main(int argc, char *argv[])
       }
     }
 	}
-	
-	
-	while(d.player.is_alive){
-  	render_dungeon(&d);
-  	update_dungeon(&d, &heap);
-		usleep(1000000);
-	}
-  
-  dijkstra(&d);
+	character_t *c;
+	dijkstra(&d);
   dijkstra_tunnel(&d);
+  //render_dungeon(&d);
+
+	while(d.player.is_alive && (c = heap_remove_min(&heap))){
+		
+		while(!c->is_alive){
+			c->hn = NULL;
+			if(c->is_player){
+				printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n you died\n");
+				break;
+			}
+			
+			c = heap_remove_min(&heap);
+			free(c);
+		}
+		printf("speed = %d\n", c->speed);
+		move(&d, &heap, c);
+		//if(c->is_player){
+			render_dungeon(&d);
+			usleep(1000000);
+		//}
+
+	}
+	//render_dungeon(&d);
+  
   //render_distance_map(&d);
   //render_tunnel_distance_map(&d);
   //render_hardness_map(&d);
