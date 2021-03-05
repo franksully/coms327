@@ -1295,6 +1295,10 @@ void render_tunnel_distance_map(dungeon_t *d)
 
 void move(dungeon_t *d, heap_t *heap, character_t *mon){
 	if(mon->is_player){
+		printf("my turn :(");
+		mon->next_turn += (1000/ mon->speed);
+
+		heap_insert(heap, mon);
 		return;
 	}
 	if(mon->monster.id > 7){
@@ -1324,6 +1328,10 @@ void move(dungeon_t *d, heap_t *heap, character_t *mon){
 		mon->position[dim_y] = y;
 		mon->position[dim_x] = x;
 		
+		if(d->character_map[y][x] != NULL){
+			d->character_map[y][x]->is_alive = 0;
+		}
+		
 		if(d->hardness[y][x] != 0){
 			if(d->hardness[y][x] <= 85){
 				d->hardness[y][x] = 0;
@@ -1341,7 +1349,7 @@ void move(dungeon_t *d, heap_t *heap, character_t *mon){
 		//printf("x:%d\n", x);
 		//printf("y:%d\n", y);
 		//printf("turn:%d\n", mon->next_turn);
-		mon->next_turn +=(1000/ mon->speed);
+		mon->next_turn += (1000/ mon->speed);
 		//mon -> hn = heap_insert(heap, mon);
 		heap_insert(heap, mon);
 	}else{
@@ -1365,20 +1373,14 @@ void move(dungeon_t *d, heap_t *heap, character_t *mon){
 				}
 			}
 		}
+		if(d->character_map[y][x] != NULL){
+			d->character_map[y][x]->is_alive = 0;
+		}
 		mon->position[dim_y] = y;
 		mon->position[dim_x] = x;
 		
 		if(d->hardness[y][x] != 0){
-			if(d->hardness[y][x] <= 85){
-				d->hardness[y][x] = 0;
-				d->map[y][x] = ter_floor_hall;
-				dijkstra(d);
-				dijkstra_tunnel(d);
-			}else{
-				d->hardness[y][x] -= 85;
-				dijkstra_tunnel(d);
-			}
-		
+			printf("this should not happen\n");
 		}
 		//printf("%d,%d\n", mon->position[dim_y], mon->position[dim_x]);
 		d->character_map[y][x] = mon;
@@ -1390,6 +1392,8 @@ void move(dungeon_t *d, heap_t *heap, character_t *mon){
 		heap_insert(heap, mon);
 	
 	}
+	
+	
 	
 }
 

@@ -181,26 +181,29 @@ int main(int argc, char *argv[])
   //render_dungeon(&d);
 
 	while(d.player.is_alive && (c = heap_remove_min(&heap))){
-		
+	
 		while(!c->is_alive){
-			c->hn = NULL;
-			if(c->is_player){
-				printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n you died\n");
-				break;
-			}
 			
-			c = heap_remove_min(&heap);
+			character_t *x;
+			x = heap_remove_min(&heap);
+			
+			printf("somebody dead\n");
+			c->hn = NULL;
 			free(c);
+			printf("free\n");
+			c = x;
 		}
-		printf("speed = %d\n", c->speed);
+		//printf("speed = %d\n", c->speed);
 		move(&d, &heap, c);
-		//if(c->is_player){
+		if(c->is_player){
 			render_dungeon(&d);
 			usleep(1000000);
-		//}
+		}
 
 	}
-	//render_dungeon(&d);
+	
+	render_dungeon(&d);
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n you died\n");
   
   //render_distance_map(&d);
   //render_tunnel_distance_map(&d);
