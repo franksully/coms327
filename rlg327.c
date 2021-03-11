@@ -93,50 +93,66 @@ void game_loop(dungeon_t *d) {
     // down-left
 		case '1':
 		case 'b':
-			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] - 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] - 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y] + 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] + 1);
 			}
 			break;
 		// down
 		case '2':
 		case 'j':
-			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x]] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x]] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x]] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y] + 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] + 1);
 			}
 			break;
 		// down-right
 		case '3':
 		case 'n':
-			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] + 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] + 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y] + 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] + 1);
 			}
 			break;
 		// left
 		case '4':
 		case 'h':
-			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] - 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y]][d->pc.position[dim_x] - 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y]);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y]);
 			}
 			break;
 		// rest
 		case '5':
-		//case space:
+		case 0040:
 			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] != ter_wall_immutable) {
 				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y]);
 				no_op = 0;
@@ -148,45 +164,61 @@ void game_loop(dungeon_t *d) {
 		// right
 		case '6':
 		case 'l':
-			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] + 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y]][d->pc.position[dim_x] + 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y]);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y]);
 			}
 			break;
 		// up-left
 		case '7':
 		case 'y':
-			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] - 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] - 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y] - 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] - 1);
 			}
 			break;
 		// up
 		case '8':
 		case 'k':
-			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x]] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x]] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x]] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y] - 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] - 1);
 			}
 			break;
 		// up-right
 		case '9':
 		case 'u':
-			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] + 1] != ter_wall_immutable &&
+					d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] + 1] != ter_wall) {
 				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y] - 1);
 				no_op = 0;
 			}
 			else {
 				no_op = 1;
+				move(0,0);
+				clrtoeol();
+				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] - 1);
 			}
 			break;
 		// quit
@@ -196,11 +228,17 @@ void game_loop(dungeon_t *d) {
 			break;
 		default:
 			no_op = 1;
+			move(0,0);
+			clrtoeol();
+			printw("Invalid input, octal ID: %o" , key);
 			break;
 		}
 		
+		refresh();
 		if (!no_op) {
 			render_dungeon(d);
+			move(0,0);
+			clrtoeol();
 		}
 	}
 }
