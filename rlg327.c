@@ -3,6 +3,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ncurses.h>
 
 #include "dungeon.h"
 #include "pc.h"
@@ -71,6 +72,137 @@ void usage(char *name)
           name);
 
   exit(-1);
+}
+
+void io_init_terminal(void) {
+	initscr();
+	raw();
+	noecho();
+	curs_set(0);
+	keypad(stdscr, TRUE);
+}
+
+void game_loop(dungeon_t *d) {
+	uint32_t no_op = 0;
+  int32_t key;
+	
+	render_dungeon(d);
+	while (pc_is_alive(d) && dungeon_has_npcs(d)) {
+		key = getch();
+    switch (key) {
+    // down-left
+		case '1':
+		case 'b':
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y] + 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// down
+		case '2':
+		case 'j':
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x]] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y] + 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// down-right
+		case '3':
+		case 'n':
+			if (d->map[d->pc.position[dim_y] + 1][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y] + 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// left
+		case '4':
+		case 'h':
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y]);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// rest
+		case '5':
+		//case space:
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y]);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// right
+		case '6':
+		case 'l':
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y]);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// up-left
+		case '7':
+		case 'y':
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] - 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] - 1, d->pc.position[dim_y] - 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// up
+		case '8':
+		case 'k':
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x]] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y] - 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// up-right
+		case '9':
+		case 'u':
+			if (d->map[d->pc.position[dim_y] - 1][d->pc.position[dim_x] + 1] != ter_wall_immutable) {
+				do_moves(d, d->pc.position[dim_x] + 1, d->pc.position[dim_y] - 1);
+				no_op = 0;
+			}
+			else {
+				no_op = 1;
+			}
+			break;
+		// quit
+		case 'Q':
+			d->pc.alive = 0;
+			no_op = 1;
+			break;
+		default:
+			no_op = 1;
+			break;
+		}
+		
+		if (!no_op) {
+			render_dungeon(d);
+		}
+	}
 }
 
 int main(int argc, char *argv[])
@@ -206,9 +338,9 @@ int main(int argc, char *argv[])
   }
 
   if (!do_load && !do_image) {
-    printf("Seed is %ld.\n", seed);
+    mvprintw(0, 0, "Seed is %ld.\n", seed);
   } else {
-    printf("Seed is %ld.  Dungeon loaded from file.\n", seed);
+    mvprintw(0, 0, "Seed is %ld.  Dungeon loaded from file.\n", seed);
   }
   srand(seed);
 
@@ -226,6 +358,11 @@ int main(int argc, char *argv[])
   config_pc(&d);
   gen_monsters(&d);
 
+	io_init_terminal();
+	
+	game_loop(&d);
+
+	/*
   while (pc_is_alive(&d) && dungeon_has_npcs(&d)) {
     render_dungeon(&d);
     do_moves(&d);
@@ -235,6 +372,7 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
+	*/
 
   if (do_save) {
     if (do_save_seed) {
@@ -260,11 +398,15 @@ int main(int argc, char *argv[])
     }
   }
 
+	/*
   printf("%s", pc_is_alive(&d) ? victory : tombstone);
   printf("You defended your life in the face of %u deadly beasts.\n"
          "You avenged the cruel and untimely murders of %u "
          "peaceful dungeon residents.\n",
          d.pc.kills[kill_direct], d.pc.kills[kill_avenged]);
+	*/
+
+	endwin(); // ends curses screen
 
   pc_delete(d.pc.pc);
 

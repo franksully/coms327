@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <ncurses.h>
 
 #include "dungeon.h"
 #include "heap.h"
@@ -43,7 +44,7 @@ void move_character(dungeon_t *d, character_t *c, pair_t next)
   }
 }
 
-void do_moves(dungeon_t *d)
+void do_moves(dungeon_t *d, uint8_t next_x, uint8_t next_y)
 {
   pair_t next;
   character_t *c;
@@ -103,14 +104,19 @@ void do_moves(dungeon_t *d)
      * and recreated every time we leave and re-enter this function.    */
     e->c = NULL;
     event_delete(e);
-    pc_next_pos(d, next);
+    /*
+		pc_next_pos(d, next);
     next[dim_x] += c->position[dim_x];
     next[dim_y] += c->position[dim_y];
     if (mappair(next) <= ter_floor) {
       mappair(next) = ter_floor_hall;
       hardnesspair(next) = 0;
     }
+		*/
+		next[dim_x] = next_x;
+		next[dim_y] = next_y;
     move_character(d, c, next);
+		mvprintw(23, 0, "Moving to %d, %d", next_x, next_y);
 
     dijkstra(d);
     dijkstra_tunnel(d);

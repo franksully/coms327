@@ -5,10 +5,10 @@ RM = rm -f
 
 TERM = "\"S2021\""
 
-CFLAGS = -Wall -Werror -ggdb -funroll-loops -DTERM=$(TERM)
-CXXFLAGS = -Wall -Werror -ggdb -funroll-loops -DTERM=$(TERM)
+CFLAGS = -Wall -Werror -lncurses -ggdb -funroll-loops -DTERM=$(TERM)
+CXXFLAGS = -Wall -Werror -lncurses -ggdb -funroll-loops -DTERM=$(TERM)
 
-LDFLAGS = 
+LDFLAGS = -lncurses
 
 BIN = rlg327
 OBJS = rlg327.o heap.o dungeon.o path.o utils.o character.o \
