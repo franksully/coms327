@@ -1,4 +1,6 @@
-3/10/2021 22:00 ; (Frank) converted code to curses format
+3/10/2021 22:00 ; (Amon) converted code to curses format
 3/10/2021 23:30 ; (Frank) added manual PC movement
 3/11/2021 11:40 ; (Frank) fixed PC tunneling issues
 3/11/2021 15:30 ; (Frank) implemented moving between levels in dungeon
+3/11/2021 16:00 ; (Amon) began work on monster list
+3/11/2021 16:30 ; (Frank) continued work on monster list

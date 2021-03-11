@@ -82,7 +82,56 @@ void io_init_terminal(void) {
 	keypad(stdscr, TRUE);
 }
 
-
+void list_loop(dungeon_t *d) {
+	int32_t key = 'm';
+	char *blank_line = "                              ";
+	
+	//uint16_t mon_count = d->num_monsters;
+	
+	/*
+	character_t *character_list[mon_count];
+	int32_t i = 0;
+	for (int y = 0; y < DUNGEON_Y; y++) {
+		for (int x = 0; x < DUNGEON_X; x++) {
+			if (charxy(x,y)) {
+				if(charxy(x,y)->position[dim_x] != d->pc.position[dim_x] && charxy(x,y)->position[dim_y] != d->pc.position[dim_y]) {
+					&character_list[i] = &d->character[y][x];
+					i++;
+				}
+			}
+		}
+	}
+	*/
+	mvprintw(2, 25, "         MONSTER LIST          ");
+	mvprintw(3, 25, "-------------------------------");
+	
+	for (int j = 4; j < 19; j++) {
+		mvprintw(j, 25, blank_line);
+	}
+	
+	uint16_t i = 0;
+	
+	for (int y = 0; y < DUNGEON_Y; y++) {
+		for (int x = 0; x < DUNGEON_X; x++) {
+			if (charxy(x,y)) {
+				mvprintw(i+4, 35, "position: %d, %d", charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
+				i++;
+			}
+			if (i > 15) {
+				break;
+			}
+		}
+		if (i > 15) {
+			break;
+		}
+	}
+	
+	refresh();
+	
+	while (key != 0033) {
+		key = getch();
+	}
+}
 
 void game_loop(dungeon_t *d) {
 	uint32_t no_op = 0;
@@ -243,6 +292,10 @@ void game_loop(dungeon_t *d) {
 			}
 			break;
 		// quit
+		case 'm':
+			list_loop(d);
+			no_op = 0;
+			break;
 		case 'Q':
 			d->pc.alive = 0;
 			no_op = 1;
