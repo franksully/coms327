@@ -113,10 +113,10 @@ void do_moves(dungeon_t *d, uint8_t next_x, uint8_t next_y)
       hardnesspair(next) = 0;
     }
 		*/
+		mvprintw(23, 0, "Moving from %d, %d", c->position[dim_x], c->position[dim_y]);
 		next[dim_x] = next_x;
 		next[dim_y] = next_y;
     move_character(d, c, next);
-		mvprintw(23, 0, "Moving to %d, %d", next_x, next_y);
 
     dijkstra(d);
     dijkstra_tunnel(d);

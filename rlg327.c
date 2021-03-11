@@ -82,6 +82,8 @@ void io_init_terminal(void) {
 	keypad(stdscr, TRUE);
 }
 
+
+
 void game_loop(dungeon_t *d) {
 	uint32_t no_op = 0;
   int32_t key;
@@ -89,7 +91,9 @@ void game_loop(dungeon_t *d) {
 	render_dungeon(d);
 	while (pc_is_alive(d) && dungeon_has_npcs(d)) {
 		key = getch();
-    switch (key) {
+    move(0,0);
+		clrtoeol();
+		switch (key) {
     // down-left
 		case '1':
 		case 'b':
@@ -100,9 +104,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] + 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] + 1);
 			}
 			break;
 		// down
@@ -115,9 +117,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] + 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] + 1);
 			}
 			break;
 		// down-right
@@ -130,9 +130,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] + 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] + 1);
 			}
 			break;
 		// left
@@ -145,14 +143,13 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y]);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y]);
 			}
 			break;
 		// rest
 		case '5':
 		case 0040:
+		case '.':
 			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] != ter_wall_immutable) {
 				do_moves(d, d->pc.position[dim_x], d->pc.position[dim_y]);
 				no_op = 0;
@@ -171,9 +168,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y]);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y]);
 			}
 			break;
 		// up-left
@@ -186,9 +181,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] - 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] - 1, d->pc.position[dim_y] - 1);
 			}
 			break;
 		// up
@@ -201,9 +194,7 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] - 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x], d->pc.position[dim_y] - 1);
 			}
 			break;
 		// up-right
@@ -216,9 +207,39 @@ void game_loop(dungeon_t *d) {
 			}
 			else {
 				no_op = 1;
-				move(0,0);
-				clrtoeol();
-				printw("Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] - 1);
+				mvprintw(0, 0, "Invalid move to %d, %d! PC cannot tunnel", d->pc.position[dim_x] + 1, d->pc.position[dim_y] - 1);
+			}
+			break;
+		case '>':
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_down) {
+				no_op = 0;
+				pc_delete(d->pc.pc);
+				delete_dungeon(d);
+				init_dungeon(d);
+				gen_dungeon(d);
+				config_pc(d);
+				gen_monsters(d);
+				mvprintw(0, 0, "Moved downward to a new level");
+			}
+			else {
+				no_op = 1;
+				mvprintw(0, 0, "Cannot perform action, not standing on a downward staircase!");
+			}
+			break;
+		case '<':
+			if (d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_up) {
+				no_op = 0;
+				pc_delete(d->pc.pc);
+				delete_dungeon(d);
+				init_dungeon(d);
+				gen_dungeon(d);
+				config_pc(d);
+				gen_monsters(d);
+				mvprintw(0, 0, "Moved upward to a new level");
+			}
+			else {
+				no_op = 1;
+				mvprintw(0, 0, "Cannot perform action, not standing on an upward staircase!");
 			}
 			break;
 		// quit
@@ -228,18 +249,32 @@ void game_loop(dungeon_t *d) {
 			break;
 		default:
 			no_op = 1;
-			move(0,0);
-			clrtoeol();
-			printw("Invalid input, octal ID: %o" , key);
+			mvprintw(0, 0, "Invalid input, octal ID: %o" , key);
 			break;
 		}
 		
 		refresh();
 		if (!no_op) {
 			render_dungeon(d);
-			move(0,0);
-			clrtoeol();
 		}
+	}
+	
+	erase();
+	
+	if (pc_is_alive(d)) {
+		mvprintw(0, 0, victory);
+	}
+	else {
+		mvprintw(0, 0, tombstone);
+	}
+	mvprintw(21, 8, "You defended your life in the face of %u deadly beasts.", d->pc.kills[kill_direct]);
+  mvprintw(22, 4, "You avenged the untimely murders of %u peaceful dungeon residents.",
+										d->pc.kills[kill_avenged]);
+	mvprintw(23, 30, "(Press 'Q' to quit)");
+	refresh();
+	
+	while(key != 'Q') {
+		key = getch();
 	}
 }
 
