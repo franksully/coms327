@@ -117,11 +117,11 @@ int list_loop(dungeon_t *d) {
 	if(d->num_monsters < 15){
 		maxNum = d->num_monsters;
 	}
-	int pc_y = d->pc.position[dim_y];
-	int pc_x = d->pc.position[dim_x];
+	int8_t pc_y = d->pc.position[dim_y];
+	int8_t pc_x = d->pc.position[dim_x];
 	
-	for (int y = 0; y < DUNGEON_Y; y++) {
-		for (int x = 0; x < DUNGEON_X; x++) {
+	for (int8_t y = 0; y < DUNGEON_Y; y++) {
+		for (int8_t x = 0; x < DUNGEON_X; x++) {
 			if (charxy(x,y) && !(pc_y == y && pc_x == x)) {
 				char lateral[12];
 				if (pc_y - y > 0) {

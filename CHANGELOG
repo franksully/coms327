@@ -7,3 +7,5 @@
 3/11/2021 17:00 ; (Amon) fixed formatting for monster list
 3/11/2021 18:30 ; (Amon) added scrolling to monster list
 3/11/2021 19:30 ; (Frank) tweaked formatting, added quitting from list
+3/11/2021 20:00 ; (Frank) modified the janky loops
+3/11/2021 20:30 ; (Amon) updated list_loop()
