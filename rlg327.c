@@ -82,9 +82,9 @@ void io_init_terminal(void) {
 	keypad(stdscr, TRUE);
 }
 
-void list_loop(dungeon_t *d) {
+int list_loop(dungeon_t *d) {
 	int32_t key = 'm';
-	char *blank_line = "                                  ";
+	char *blank_line = "                                        ";
 	
 	//uint16_t mon_count = d->num_monsters;
 	
@@ -102,11 +102,11 @@ void list_loop(dungeon_t *d) {
 		}
 	}
 	*/
-	mvprintw(2, 23, "           MONSTER LIST           ");
-	mvprintw(3, 23, "----------------------------------");
+	mvprintw(2, 20, "              MONSTER LIST              ");
+	mvprintw(3, 20, "----------------------------------------");
 	
 	for (int j = 4; j < 19; j++) {
-		mvprintw(j, 23, blank_line);
+		mvprintw(j, 20, blank_line);
 	}
 	char monList[d->num_monsters][38]; 
 	char string[38];
@@ -117,35 +117,77 @@ void list_loop(dungeon_t *d) {
 	if(d->num_monsters < 15){
 		maxNum = d->num_monsters;
 	}
+	int pc_y = d->pc.position[dim_y];
+	int pc_x = d->pc.position[dim_x];
 	
 	for (int y = 0; y < DUNGEON_Y; y++) {
 		for (int x = 0; x < DUNGEON_X; x++) {
-			if (charxy(x,y) && d->pc.position[dim_y] != y && d->pc.position[dim_x] != x) {
-				sprintf(string, "monster %c at position: %d, %d", charxy(x,y)->symbol, 
-													charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
+			if (charxy(x,y) && !(pc_y == y && pc_x == x)) {
+				char lateral[12];
+				if (pc_y - y > 0) {
+					sprintf(lateral, "north by %d", pc_y - y);
+				}
+				else if (pc_y - y < 0) {
+					sprintf(lateral, "south by %d", -1*(pc_y - y));
+				}
+				else {
+					sprintf(lateral, "not");
+				}
+				
+				char horizontal[12];
+				if (pc_x - x > 0) {
+					sprintf(horizontal, "west by %d", pc_x - x);
+				}
+				else if (pc_x - x < 0) {
+					sprintf(horizontal, "east by %d", -1*(pc_x - x));
+				}
+				else {
+					sprintf(horizontal, "not");
+				}
+				
+				if(!strcmp(lateral, "not")) {
+					sprintf(string, "Monster %c is %s", charxy(x,y)->symbol, horizontal);
+				}
+				else if (!strcmp(horizontal, "not")) {
+					sprintf(string, "Monster %c is %s", charxy(x,y)->symbol, lateral);
+				}
+				else {
+					sprintf(string, "Monster %c is %s, %s", charxy(x,y)->symbol, lateral, horizontal);
+				}
+				
 				strcpy(monList[i], string);
 				i++;
 			}
 		}
 	}
 	
-	for(i = 0; i <= maxNum; i++){
-		mvprintw(i+4, 25, "%s", monList + i + t);
+	for(i = 0; i < maxNum; i++){
+		mvprintw(i+4, 22, "%s", monList[i + t]);
 	}
+	
+	/*
+	move(0,0);
+	clrtoeol();
+	printw("num monsters: %d", d->num_monsters);
+	*/
 	
 	while (key != 0033) {
 	
 		refresh();
+		
 		key = getch();
 		if(key == 0402){ // donw arrow
-
+			for (int j = 4; j < 19; j++) {
+				mvprintw(j, 20, blank_line);
+			}
+			
 			i=0;
 
-			if(t < d->num_monsters - maxNum -1){
+			if(t < d->num_monsters - maxNum){
 				t++;
 			}
-			for(i = 0; i <= maxNum; i++){
-				mvprintw(i+4, 25, "%s", monList[i + t]);
+			for(i = 0; i < maxNum; i++){
+				mvprintw(i+4, 22, "%s", monList[i + t]);
 			}
 			/*for (int y = 0; y < DUNGEON_Y; y++) {
 				for (int x = 0; x < DUNGEON_X; x++) {
@@ -169,12 +211,16 @@ void list_loop(dungeon_t *d) {
 			}*/
 		}
 		if(key == 0403){ // up arrow
+			for (int j = 4; j < 19; j++) {
+				mvprintw(j, 20, blank_line);
+			}
+			
 			i=0;
 			if(t > 0){
 				t--;
 			}
-			for(i = 0; i <= maxNum; i++){
-				mvprintw(i+4, 25, "%s", monList[i + t]);
+			for(i = 0; i < maxNum; i++){
+				mvprintw(i+4, 22, "%s", monList[i + t]);
 			}
 			/*for (int y = 0; y < DUNGEON_Y; y++) {
 				for (int x = 0; x < DUNGEON_X; x++) {
@@ -197,7 +243,11 @@ void list_loop(dungeon_t *d) {
 				}
 			}*/
 		}
+		if(key == 'Q'){
+			return 0;
+		}
 	}
+	return 1;
 }
 
 void game_loop(dungeon_t *d) {
@@ -360,9 +410,11 @@ void game_loop(dungeon_t *d) {
 			break;
 		// quit
 		case 'm':
-			list_loop(d);
 			no_op = 0;
-			break;
+			if(list_loop(d)) {
+				break;
+			}
+			key = 'Q';
 		case 'Q':
 			d->pc.alive = 0;
 			no_op = 1;
