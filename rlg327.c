@@ -108,28 +108,94 @@ void list_loop(dungeon_t *d) {
 	for (int j = 4; j < 19; j++) {
 		mvprintw(j, 25, blank_line);
 	}
-	
+	char monList[d->num_monsters][38]; 
+	char string[38];
 	uint16_t i = 0;
+	uint16_t t = 0;
+	uint16_t maxNum = 15;
+	
+	if(d->num_monsters < 15){
+		maxNum = d->num_monsters;
+	}
 	
 	for (int y = 0; y < DUNGEON_Y; y++) {
 		for (int x = 0; x < DUNGEON_X; x++) {
-			if (charxy(x,y)) {
-				mvprintw(i+4, 35, "position: %d, %d", charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
+			if (charxy(x,y) && d->pc.position[dim_y] != y && d->pc.position[dim_x] != x) {
+				sprintf(string, "position: %d, %d", charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
+				strcpy(monList[i], string);
 				i++;
 			}
-			if (i > 15) {
-				break;
-			}
-		}
-		if (i > 15) {
-			break;
 		}
 	}
 	
-	refresh();
+	for(i = 0; i <= maxNum; i++){
+		mvprintw(i+4, 35, "%s", monList + i + t);
+	}
 	
 	while (key != 0033) {
+	
+		refresh();
 		key = getch();
+		if(key == 0402){ // donw arrow
+
+			i=0;
+
+			if(t < d->num_monsters - maxNum -1){
+				t++;
+			}
+			for(i = 0; i <= maxNum; i++){
+				mvprintw(i+4, 35, "%s", monList + i + t);
+			}
+			/*for (int y = 0; y < DUNGEON_Y; y++) {
+				for (int x = 0; x < DUNGEON_X; x++) {
+					if (charxy(x,y)) {
+
+
+						//(monList + i) = string;
+						//printf("%s\n", monList[i]);
+					
+						mvprintw(i+4, 35, "%s", monList + i + t);
+						//mvprintw(i+4, 35, "%s", monList[i]);
+						i++;
+					}
+					if (i > 15) {
+						break;
+					}
+				}
+				if (i > 15) {
+					break;
+				}
+			}*/
+		}
+		if(key == 0403){ // up arrow
+			i=0;
+			if(t > 0){
+				t--;
+			}
+			for(i = 0; i <= maxNum; i++){
+				mvprintw(i+4, 35, "%s", monList + i + t);
+			}
+			/*for (int y = 0; y < DUNGEON_Y; y++) {
+				for (int x = 0; x < DUNGEON_X; x++) {
+					if (charxy(x,y)) {
+
+
+						//(monList + i) = string;
+						//printf("%s\n", monList[i]);
+					
+						mvprintw(i+4, 35, "%s", monList + i + t);
+						//mvprintw(i+4, 35, "%s", monList[i]);
+						i++;
+					}
+					if (i > 15) {
+						break;
+					}
+				}
+				if (i > 15) {
+					break;
+				}
+			}*/
+		}
 	}
 }
 
