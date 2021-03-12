@@ -120,6 +120,10 @@ int list_loop(dungeon_t *d) {
 	int8_t pc_y = d->pc.position[dim_y];
 	int8_t pc_x = d->pc.position[dim_x];
 	
+	move(0,0);
+	clrtoeol();
+	printw("%d monsters in the dungeon", d->num_monsters);
+	
 	for (int8_t y = 0; y < DUNGEON_Y; y++) {
 		for (int8_t x = 0; x < DUNGEON_X; x++) {
 			if (charxy(x,y) && !(pc_y == y && pc_x == x)) {
