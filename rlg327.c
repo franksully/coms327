@@ -84,7 +84,7 @@ void io_init_terminal(void) {
 
 void list_loop(dungeon_t *d) {
 	int32_t key = 'm';
-	char *blank_line = "                              ";
+	char *blank_line = "                                  ";
 	
 	//uint16_t mon_count = d->num_monsters;
 	
@@ -102,11 +102,11 @@ void list_loop(dungeon_t *d) {
 		}
 	}
 	*/
-	mvprintw(2, 25, "         MONSTER LIST          ");
-	mvprintw(3, 25, "-------------------------------");
+	mvprintw(2, 23, "           MONSTER LIST           ");
+	mvprintw(3, 23, "----------------------------------");
 	
 	for (int j = 4; j < 19; j++) {
-		mvprintw(j, 25, blank_line);
+		mvprintw(j, 23, blank_line);
 	}
 	char monList[d->num_monsters][38]; 
 	char string[38];
@@ -121,7 +121,8 @@ void list_loop(dungeon_t *d) {
 	for (int y = 0; y < DUNGEON_Y; y++) {
 		for (int x = 0; x < DUNGEON_X; x++) {
 			if (charxy(x,y) && d->pc.position[dim_y] != y && d->pc.position[dim_x] != x) {
-				sprintf(string, "position: %d, %d", charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
+				sprintf(string, "monster %c at position: %d, %d", charxy(x,y)->symbol, 
+													charxy(x,y)->position[dim_x], charxy(x,y)->position[dim_y]);
 				strcpy(monList[i], string);
 				i++;
 			}
@@ -129,7 +130,7 @@ void list_loop(dungeon_t *d) {
 	}
 	
 	for(i = 0; i <= maxNum; i++){
-		mvprintw(i+4, 35, "%s", monList + i + t);
+		mvprintw(i+4, 25, "%s", monList + i + t);
 	}
 	
 	while (key != 0033) {
@@ -144,7 +145,7 @@ void list_loop(dungeon_t *d) {
 				t++;
 			}
 			for(i = 0; i <= maxNum; i++){
-				mvprintw(i+4, 35, "%s", monList + i + t);
+				mvprintw(i+4, 25, "%s", monList[i + t]);
 			}
 			/*for (int y = 0; y < DUNGEON_Y; y++) {
 				for (int x = 0; x < DUNGEON_X; x++) {
@@ -173,7 +174,7 @@ void list_loop(dungeon_t *d) {
 				t--;
 			}
 			for(i = 0; i <= maxNum; i++){
-				mvprintw(i+4, 35, "%s", monList + i + t);
+				mvprintw(i+4, 25, "%s", monList[i + t]);
 			}
 			/*for (int y = 0; y < DUNGEON_Y; y++) {
 				for (int x = 0; x < DUNGEON_X; x++) {
