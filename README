@@ -1,0 +1,13 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+This program generates a dungeon with a certain number of monsters. The player
+character is able to move in all eight directions or wait on the current space.
+The player cannot tunnel through walls, but some of the monsters do not have
+this weakness. Most of the game is run through the game_loop() function using
+ncurses to display the map. Pressing 'm' displays a list of monsters and their
+relative location to the player. The list_loop() function allows scrolling
+through the list if there are too many monsters to fit on the screen. Using
+stairs creates a new dungeon with a new batch of monsters. Previous dungeon
+floors are not saved. The screen is initialized using io_init_terminal() and is
+cleared at the end of the program (after pressing 'Q').
