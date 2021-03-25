@@ -214,12 +214,12 @@ void io_display(dungeon_t *d)
   for (y = 0; y < 21; y++) {
     for (x = 0; x < 80; x++) {
       if (d->character[y][x]) {
-				if (is_visible(d, x, y)) {
+				if (is_visible(d, x, y) || d->disable_fog) {
 					mvaddch(y + 1, x, d->character[y][x]->symbol);
 				}
       } else {
-				if (d->fog_map[y][x]) {
-					if (is_visible(d, x, y)) {
+				if (d->fog_map[y][x] || d->disable_fog) {
+					if (is_visible(d, x, y) && !d->disable_fog) {
 						attron(A_BOLD);
 					}
 					switch (mapxy(x, y)) {
@@ -551,6 +551,11 @@ void io_handle_input(dungeon_t *d)
     case 'm':
       io_list_monsters(d);
       fail_code = 1;
+      break;
+		case 'f':
+			d->disable_fog = (d->disable_fog) ? 0 : 1;
+			io_display(d);
+			fail_code = 1;
       break;
     case 'q':
       /* Demonstrate use of the message queue.  You can use this for *
