@@ -275,11 +275,12 @@ void io_display_monster_list(dungeon_t *d)
   getch();
 }
 
-uint32_t io_teleport_pc(dungeon_t *d)
+
+uint32_t io_teleport_pc_random(dungeon_t *d)
 {
   /* Just for fun. */
   pair_t dest;
-
+	
   do {
     dest[dim_x] = rand_range(1, DUNGEON_X - 2);
     dest[dim_y] = rand_range(1, DUNGEON_Y - 2);
@@ -293,6 +294,69 @@ uint32_t io_teleport_pc(dungeon_t *d)
 
   if (mappair(dest) < ter_floor) {
     mappair(dest) = ter_floor;
+  }
+
+  dijkstra(d);
+  dijkstra_tunnel(d);
+
+  return 0;
+}
+
+uint32_t io_teleport_pc(dungeon_t *d)
+{
+  pair_t next;
+
+  next[dim_y] = d->pc.position[dim_y];
+  next[dim_x] = d->pc.position[dim_x];
+	int key;
+
+  do {
+  	mvprintw(0, 0, "y = %d  x = %d    ",next[dim_y], next[dim_x]);
+		switch (key = getch()) {
+
+		case '1':
+		case '2':
+		case '3':
+		  next[dim_y]++;
+		  break;
+		case '4':
+		case '5':
+		case '6':
+		  break;
+		case '7':
+		case '8':
+		case '9':
+		  next[dim_y]--;
+		  break;
+		}
+		switch (key) {
+		case '1':
+		case '4':
+		case '7':
+		  next[dim_x]--;
+		  break;
+		case '2':
+		case '5':
+		case '8':
+		  break;
+		case '3':
+		case '6':
+		case '9':
+		  next[dim_x]++;
+		  break;
+	}} while(key != 'g' && key != 'r');
+	if(key == 'r'){
+		io_teleport_pc_random(d);
+		return 0;
+	}
+ 	d->character[d->pc.position[dim_y]][d->pc.position[dim_x]] = NULL;
+  d->character[next[dim_y]][next[dim_x]] = &d->pc;
+
+  d->pc.position[dim_y] = next[dim_y];
+  d->pc.position[dim_x] = next[dim_x];
+
+  if (mappair(next) < ter_floor) {
+    mappair(next) = ter_floor;
   }
 
   dijkstra(d);
@@ -530,7 +594,7 @@ void io_handle_input(dungeon_t *d)
     case 'g':
       /* Teleport the PC to a random place in the dungeon.              */
       io_teleport_pc(d);
-      fail_code = 0;
+      fail_code = 1;
       break;
     case 'm':
       io_list_monsters(d);
