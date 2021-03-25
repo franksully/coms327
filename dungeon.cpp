@@ -67,7 +67,7 @@ static void dijkstra_corridor(dungeon_t *d, pair_t from, pair_t to)
   static corridor_path_t path[DUNGEON_Y][DUNGEON_X], *p;
   static uint32_t initialized = 0;
   heap_t h;
-  uint32_t x, y;
+  int8_t x, y;
 
   if (!initialized) {
     for (y = 0; y < DUNGEON_Y; y++) {
@@ -99,7 +99,7 @@ static void dijkstra_corridor(dungeon_t *d, pair_t from, pair_t to)
     }
   }
 
-  while ((p = heap_remove_min(&h))) {
+  while ((p = (corridor_path_t*) heap_remove_min(&h))) {
     p->hn = NULL;
 
     if ((p->pos[dim_y] == to[dim_y]) && p->pos[dim_x] == to[dim_x]) {
@@ -166,7 +166,7 @@ static void dijkstra_corridor_inv(dungeon_t *d, pair_t from, pair_t to)
   static corridor_path_t path[DUNGEON_Y][DUNGEON_X], *p;
   static uint32_t initialized = 0;
   heap_t h;
-  uint32_t x, y;
+  int8_t x, y;
 
   if (!initialized) {
     for (y = 0; y < DUNGEON_Y; y++) {
@@ -198,7 +198,7 @@ static void dijkstra_corridor_inv(dungeon_t *d, pair_t from, pair_t to)
     }
   }
 
-  while ((p = heap_remove_min(&h))) {
+  while ((p = (corridor_path_t*) heap_remove_min(&h))) {
     p->hn = NULL;
 
     if ((p->pos[dim_y] == to[dim_y]) && p->pos[dim_x] == to[dim_x]) {
@@ -288,7 +288,8 @@ static int create_cycle(dungeon_t *d)
   /* Find the (approximately) farthest two rooms, then connect *
    * them by the shortest path using inverted hardnesses.      */
 
-  int32_t max, tmp, i, j, p, q;
+  int32_t max, tmp, p, q;
+	uint32_t i, j;
   pair_t e1, e2;
 
   for (i = max = 0; i < d->num_rooms - 1; i++) {
