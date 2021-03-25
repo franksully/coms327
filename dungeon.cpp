@@ -628,6 +628,17 @@ int gen_dungeon(dungeon_t *d)
   return 0;
 }
 
+void update_fog(dungeon_t *d) {
+	int8_t x, y;
+	for (y = d->pc.position[dim_y] - 2; y <= d->pc.position[dim_y] + 2; y++) {
+		for (x = d->pc.position[dim_x] - 2; x <= d->pc.position[dim_x] + 2; x++) {
+			if (x >= 0 && x < DUNGEON_X && y >= 0 && y < DUNGEON_Y) {
+				d->fog_map[y][x] = 1;
+			}
+		}
+	}
+}
+
 void render_dungeon(dungeon_t *d)
 {
   pair_t p;

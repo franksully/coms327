@@ -3,3 +3,6 @@
 3/25/2021 15:30 ; (Frank) converted code to C++ (excluding heap.c)
 3/25/2021 16:00 ; (Amon) began work on teleport implementation
 3/25/2021 16:30 ; (Frank) added fog of war
+3/25/2021 17:30 ; (Amon) implemented pc teleportation
+3/25/2021 18:20 ; (Amon) added bounds to teleportation
+3/25/2021 18:30 ; (Frank) fixed fog of war for monsters and teleporting

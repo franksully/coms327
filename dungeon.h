@@ -89,5 +89,6 @@ int gen_dungeon(dungeon_t *d);
 int write_dungeon(dungeon_t *d, char *file);
 int read_dungeon(dungeon_t *d, char *file);
 int read_pgm(dungeon_t *d, char *pgm);
+void update_fog(dungeon_t *d);
 
 #endif

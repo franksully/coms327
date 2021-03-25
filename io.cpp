@@ -210,13 +210,13 @@ void io_display(dungeon_t *d)
   uint32_t y, x;
   character_t *c;
 
+	update_fog(d);
+
   clear();
   for (y = 0; y < 21; y++) {
     for (x = 0; x < 80; x++) {
-      if (d->character[y][x]) {
-				if (is_visible(d, x, y) || d->disable_fog) {
-					mvaddch(y + 1, x, d->character[y][x]->symbol);
-				}
+      if (d->character[y][x] && (is_visible(d, x, y) || d->disable_fog)) {
+				mvaddch(y + 1, x, d->character[y][x]->symbol);
       } else {
 				if (d->fog_map[y][x] || d->disable_fog) {
 					if (is_visible(d, x, y) && !d->disable_fog) {

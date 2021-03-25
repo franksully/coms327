@@ -74,17 +74,6 @@ void usage(char *name)
   exit(-1);
 }
 
-void update_fog(dungeon_t *d) {
-	int8_t x, y;
-	for (y = d->pc.position[dim_y] - 2; y <= d->pc.position[dim_y] + 2; y++) {
-		for (x = d->pc.position[dim_x] - 2; x <= d->pc.position[dim_x] + 2; x++) {
-			if (x >= 0 && x < DUNGEON_X && y >= 0 && y < DUNGEON_Y) {
-				d->fog_map[y][x] = 1;
-			}
-		}
-	}
-}
-
 int main(int argc, char *argv[])
 {
   dungeon_t d;
@@ -230,7 +219,6 @@ int main(int argc, char *argv[])
     io_queue_message("Seed is %u.", seed);
   }
   while (pc_is_alive(&d) && dungeon_has_npcs(&d) && !d.quit) {
-		update_fog(&d);
     do_moves(&d);
   }
   io_display(&d);
