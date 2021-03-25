@@ -312,36 +312,43 @@ uint32_t io_teleport_pc_random(dungeon_t *d)
     mappair(dest) = ter_floor;
   }
 
-  dijkstra(d);
-  dijkstra_tunnel(d);
-
   return 0;
 }
 
 uint32_t io_teleport_pc(dungeon_t *d)
 {
   pair_t next;
-
+	int fogState = d->disable_fog;
+	d->disable_fog = 1;
   next[dim_y] = d->pc.position[dim_y];
   next[dim_x] = d->pc.position[dim_x];
 	int key;
 
   do {
-  	mvprintw(0, 0, "y = %d  x = %d    ",next[dim_y], next[dim_x]);
+  	io_display(d);
+  	mvprintw(0, 0, "teleport location y=%d x=%d    ",next[dim_y], next[dim_x]);
+  	mvaddch(next[dim_y]+1, next[dim_x], '*');
 		switch (key = getch()) {
 
 		case '1':
 		case '2':
 		case '3':
+		case 'b':
+		case 'j':
+		case 'n':
 		  next[dim_y]++;
 		  break;
 		case '4':
-		case '5':
 		case '6':
+		case 'h':
+		case 'l':
 		  break;
 		case '7':
 		case '8':
 		case '9':
+		case 'y':
+		case 'k':
+		case 'u':
 		  next[dim_y]--;
 		  break;
 		}
@@ -349,35 +356,45 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case '1':
 		case '4':
 		case '7':
+		case 'b':
+		case 'h':
+		case 'y':
 		  next[dim_x]--;
 		  break;
 		case '2':
-		case '5':
 		case '8':
+		case 'j':
+		case 'k':
 		  break;
 		case '3':
 		case '6':
 		case '9':
+		case 'n':
+		case 'l':
+		case 'u':
 		  next[dim_x]++;
 		  break;
 	}} while(key != 'g' && key != 'r');
 	if(key == 'r'){
 		io_teleport_pc_random(d);
 		return 0;
-	}
- 	d->character[d->pc.position[dim_y]][d->pc.position[dim_x]] = NULL;
-  d->character[next[dim_y]][next[dim_x]] = &d->pc;
+	}else{
+	 	d->character[d->pc.position[dim_y]][d->pc.position[dim_x]] = NULL;
+		d->character[next[dim_y]][next[dim_x]] = &d->pc;
 
-  d->pc.position[dim_y] = next[dim_y];
-  d->pc.position[dim_x] = next[dim_x];
+		d->pc.position[dim_y] = next[dim_y];
+		d->pc.position[dim_x] = next[dim_x];
+  }
 
   if (mappair(next) < ter_floor) {
     mappair(next) = ter_floor;
   }
-
+	
   dijkstra(d);
   dijkstra_tunnel(d);
-
+  d->disable_fog = fogState;
+	io_display(d);
+	
   return 0;
 }
 /* Adjectives to describe our monsters */
