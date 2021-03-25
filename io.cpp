@@ -197,6 +197,14 @@ static character_t *io_nearest_visible_monster(dungeon_t *d)
   return n;
 }
 
+int is_visible(dungeon_t *d, uint32_t x, uint32_t y) {
+	if ((int8_t) x >= d->pc.position[dim_x] - 2 && (int8_t) x <= d->pc.position[dim_x] + 2
+			&& (int8_t) y >= d->pc.position[dim_y] - 2 && (int8_t) y <= d->pc.position[dim_y] + 2) {
+		return 1;	
+	}
+	return 0;
+}
+
 void io_display(dungeon_t *d)
 {
   uint32_t y, x;
@@ -206,34 +214,42 @@ void io_display(dungeon_t *d)
   for (y = 0; y < 21; y++) {
     for (x = 0; x < 80; x++) {
       if (d->character[y][x]) {
-        mvaddch(y + 1, x, d->character[y][x]->symbol);
+				if (is_visible(d, x, y) || d->disable_fog) {
+					mvaddch(y + 1, x, d->character[y][x]->symbol);
+				}
       } else {
-        switch (mapxy(x, y)) {
-        case ter_wall:
-        case ter_wall_immutable:
-          mvaddch(y + 1, x, ' ');
-          break;
-        case ter_floor:
-        case ter_floor_room:
-          mvaddch(y + 1, x, '.');
-          break;
-        case ter_floor_hall:
-          mvaddch(y + 1, x, '#');
-          break;
-        case ter_debug:
-          mvaddch(y + 1, x, '*');
-          break;
-        case ter_stairs_up:
-          mvaddch(y + 1, x, '<');
-          break;
-        case ter_stairs_down:
-          mvaddch(y + 1, x, '>');
-          break;
-        default:
+				if (d->fog_map[y][x] || d->disable_fog) {
+					if (is_visible(d, x, y) && !d->disable_fog) {
+						attron(A_BOLD);
+					}
+					switch (mapxy(x, y)) {
+					case ter_wall:
+					case ter_wall_immutable:
+						mvaddch(y + 1, x, ' ');
+						break;
+					case ter_floor:
+					case ter_floor_room:
+						mvaddch(y + 1, x, '.');
+						break;
+					case ter_floor_hall:
+						mvaddch(y + 1, x, '#');
+						break;
+					case ter_debug:
+						mvaddch(y + 1, x, '*');
+						break;
+					case ter_stairs_up:
+						mvaddch(y + 1, x, '<');
+						break;
+					case ter_stairs_down:
+						mvaddch(y + 1, x, '>');
+						break;
+					default:
  /* Use zero as an error symbol, since it stands out somewhat, and it's *
   * not otherwise used.                                                 */
-          mvaddch(y + 1, x, '0');
-        }
+						mvaddch(y + 1, x, '0');
+					}
+					attroff(A_BOLD);
+				}
       }
     }
   }
@@ -599,6 +615,11 @@ void io_handle_input(dungeon_t *d)
     case 'm':
       io_list_monsters(d);
       fail_code = 1;
+      break;
+		case 'f':
+			d->disable_fog = (d->disable_fog) ? 0 : 1;
+			io_display(d);
+			fail_code = 1;
       break;
     case 'q':
       /* Demonstrate use of the message queue.  You can use this for *

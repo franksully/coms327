@@ -61,6 +61,8 @@ class dungeon_t {
    * that structure.  Pathfinding will require efficient use of the map,  *
    * and pulling in unnecessary data with each map cell would add a lot   *
    * of overhead to the memory system.                                    */
+	uint8_t fog_map[DUNGEON_Y][DUNGEON_X];
+	uint8_t disable_fog;
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_distance[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_tunnel[DUNGEON_Y][DUNGEON_X];
