@@ -336,7 +336,9 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'b':
 		case 'j':
 		case 'n':
-		  next[dim_y]++;
+			if(next[dim_y] < DUNGEON_Y -2){
+		  	next[dim_y]++;
+		  }
 		  break;
 		case '4':
 		case '6':
@@ -349,7 +351,9 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'y':
 		case 'k':
 		case 'u':
-		  next[dim_y]--;
+		  if(next[dim_y] > 1){
+		  	next[dim_y]--;
+		  }
 		  break;
 		}
 		switch (key) {
@@ -359,7 +363,9 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'b':
 		case 'h':
 		case 'y':
-		  next[dim_x]--;
+		  if(next[dim_x] > 1){
+		  	next[dim_x]--;
+		  }
 		  break;
 		case '2':
 		case '8':
@@ -372,7 +378,9 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'n':
 		case 'l':
 		case 'u':
-		  next[dim_x]++;
+		  if(next[dim_x] < DUNGEON_X){
+		  	next[dim_x]++;
+		  }
 		  break;
 	}} while(key != 'g' && key != 'r');
 	if(key == 'r'){
@@ -384,11 +392,12 @@ uint32_t io_teleport_pc(dungeon_t *d)
 
 		d->pc.position[dim_y] = next[dim_y];
 		d->pc.position[dim_x] = next[dim_x];
+		if (mappair(next) < ter_floor) {
+    	mappair(next) = ter_floor;
+  	}
   }
 
-  if (mappair(next) < ter_floor) {
-    mappair(next) = ter_floor;
-  }
+  
 	
   dijkstra(d);
   dijkstra_tunnel(d);
