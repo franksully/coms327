@@ -336,7 +336,7 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'b':
 		case 'j':
 		case 'n':
-			if(next[dim_y] < DUNGEON_Y -2){
+			if(next[dim_y] < DUNGEON_Y - 2){
 		  	next[dim_y]++;
 		  }
 		  break;
@@ -378,7 +378,7 @@ uint32_t io_teleport_pc(dungeon_t *d)
 		case 'n':
 		case 'l':
 		case 'u':
-		  if(next[dim_x] < DUNGEON_X){
+		  if(next[dim_x] < DUNGEON_X - 2){
 		  	next[dim_x]++;
 		  }
 		  break;

@@ -1,0 +1,11 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+Most of the code has been converted from C to C++. The structs that were in the
+previous versions have been changed into classes. A 5x5 fog of war has been
+added around the player. This can be toggled on and off by pressing 'f'. The fog
+map continues to update even when viewing the fog of war is disabled. However,
+the map is cleared upon proceeding to another floor. The pc can also teleport by
+pressing 'g'. The pc can teleport into walls, but cannot proceed past the border
+surrounding the dungeon. update_fog() updates the fog map and io_teleport_pc()
+lets the user move the pc.

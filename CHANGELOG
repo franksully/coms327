@@ -6,3 +6,5 @@
 3/25/2021 17:30 ; (Amon) implemented pc teleportation
 3/25/2021 18:20 ; (Amon) added bounds to teleportation
 3/25/2021 18:30 ; (Frank) fixed fog of war for monsters and teleporting
+3/25/2021 18:40 ; (Amon) corrected bounds for teleportation
+3/25/2021 18:50 ; (Frank) replaced structs in dungeon.cpp
