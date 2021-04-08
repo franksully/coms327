@@ -63,13 +63,13 @@ void do_combat(dungeon *d, character *atk, character *def)
 			}
     } else {
       if ((part = rand() % (sizeof (organs) / sizeof (organs[0]))) < 26) {
-        io_queue_message("As the %c eats your %s, "
+        io_queue_message("As the %s eats your %s, "
                          "you wonder if there is an afterlife.",
-                         atk->symbol, organs[part]);
+                         d->monster_descriptions[atk->list_index].name.c_str(), organs[part]);
       } else {
         io_queue_message("Your last thoughts fade away as "
-                         "the %c eats your %s...",
-                         atk->symbol, organs[part]);
+                         "the %s eats your %s...",
+                         d->monster_descriptions[atk->list_index].name.c_str(), organs[part]);
       }
       /* Queue an empty message, otherwise the game will not pause for *
        * player to see above.                                          */
@@ -92,14 +92,15 @@ void do_combat(dungeon *d, character *atk, character *def)
   if (atk != d->PC && def != d->PC) {
     if (can_see_atk && !can_see_def) {
       io_queue_message("The %c callously murders some poor, "
-                       "defenseless creature.", atk->symbol);
+                       "defenseless creature.", d->monster_descriptions[atk->list_index].name.c_str());
     }
     if (can_see_def && !can_see_atk) {
       io_queue_message("Something kills the helpless %c.", def->symbol);
     }
     if (can_see_atk && can_see_def) {
       io_queue_message("You watch in abject horror as the %c "
-                       "gruesomely murders the %c!", atk->symbol, def->symbol);
+                       "gruesomely murders the %c!", d->monster_descriptions[atk->list_index].name.c_str(), 
+																										 def->symbol);
     }
   }
 }

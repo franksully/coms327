@@ -42,7 +42,8 @@ void gen_monsters(dungeon *d)
 
   for (i = 0; i < d->num_monsters; i++) {
     m = new npc;
-    memset(m, 0, sizeof (*m));
+    //memset(m, 0, sizeof (*m));
+		*m = npc{};
     
 		for (uint32_t i = 0; i < list_size; i++) {
 			d->monster_descriptions[i].unique_spawn = 0;
@@ -68,7 +69,9 @@ void gen_monsters(dungeon *d)
 			rand_rarity = rand() % 100;
 		}
 		
+		m->hp = d->monster_descriptions[rand_list].hitpoints.roll();
     m->speed = d->monster_descriptions[rand_list].speed.roll();
+		m->damage = d->monster_descriptions[rand_list].damage;
     m->alive = 1;
     m->sequence_number = ++d->character_sequence_number;
     m->characteristics = d->monster_descriptions[rand_list].abilities;
