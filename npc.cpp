@@ -44,6 +44,10 @@ void gen_monsters(dungeon *d)
     m = new npc;
     memset(m, 0, sizeof (*m));
     
+		for (uint32_t i = 0; i < list_size; i++) {
+			d->monster_descriptions[i].unique_spawn = 0;
+		}
+		
     do {
       room = rand_range(1, d->num_rooms - 1);
       p[dim_y] = rand_range(d->rooms[room].position[dim_y],
@@ -59,7 +63,7 @@ void gen_monsters(dungeon *d)
 		
 		uint32_t rand_list = rand() % list_size;
 		uint32_t rand_rarity = 100;
-		while (rand_rarity >= d->monster_descriptions[rand_list].rarity) {
+		while ((rand_rarity >= d->monster_descriptions[rand_list].rarity) && (!d->monster_descriptions[rand_list].unique_spawn)) {
 			rand_list = rand() % list_size;
 			rand_rarity = rand() % 100;
 		}
@@ -68,10 +72,16 @@ void gen_monsters(dungeon *d)
     m->alive = 1;
     m->sequence_number = ++d->character_sequence_number;
     m->characteristics = d->monster_descriptions[rand_list].abilities;
+		m->color_index = d->monster_descriptions[rand_list].color[0];
+		m->list_index = rand_list;
     /*    m->npc->characteristics = 0xf;*/
     m->symbol = d->monster_descriptions[rand_list].symbol;
     m->have_seen_pc = 0;
     m->kills[kill_direct] = m->kills[kill_avenged] = 0;
+		
+		if (m->characteristics & NPC_UNIQ) {
+			d->monster_descriptions[rand_list].unique_spawn = 1;
+		}
 
     d->character_map[p[dim_y]][p[dim_x]] = m;
 

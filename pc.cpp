@@ -35,6 +35,7 @@ void config_pc(dungeon *d)
 
   place_pc(d);
 
+	d->PC->color_index = 7;
   d->PC->speed = PC_SPEED;
   d->PC->alive = 1;
   d->PC->sequence_number = 0;

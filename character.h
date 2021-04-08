@@ -14,6 +14,7 @@ typedef enum kill_type {
 class character {
  public:
   char symbol;
+	uint32_t color_index;
   pair_t position;
   int32_t speed;
   uint32_t alive;
