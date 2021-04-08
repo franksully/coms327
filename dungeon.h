@@ -7,6 +7,7 @@
 # include "dims.h"
 # include "character.h"
 # include "descriptions.h"
+# include "object.h"
 
 #define DUNGEON_X              80
 #define DUNGEON_Y              21
@@ -22,6 +23,7 @@
 #define NPC_MIN_SPEED          5
 #define NPC_MAX_SPEED          20
 #define MAX_MONSTERS           15
+#define MAX_OBJECTS		         15
 #define SAVE_DIR               ".rlg327"
 #define DUNGEON_SAVE_FILE      "dungeon"
 #define DUNGEON_SAVE_SEMANTIC  "RLG327-" TERM
@@ -78,11 +80,14 @@ class dungeon {
   uint8_t pc_distance[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_tunnel[DUNGEON_Y][DUNGEON_X];
   character *character_map[DUNGEON_Y][DUNGEON_X];
+	object *object_map[DUNGEON_Y][DUNGEON_X];
   pc *PC;
   heap_t events;
   uint16_t num_monsters;
   uint16_t max_monsters;
   uint32_t character_sequence_number;
+	uint16_t num_objects;
+  uint16_t max_objects;
   /* Game time isn't strictly necessary.  It's implicit in the turn number *
    * of the most recent thing removed from the event queue; however,       *
    * including it here--and keeping it up to date--provides a measure of   *
