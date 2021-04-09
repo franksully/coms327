@@ -1,0 +1,11 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+This program parses the object and monster files then populates the dungeon
+based on the rarity of each entry. Unique monsters and artifacts will only
+appear once per floor, but unique monsters can reappear on subsequent floors
+unless they are killed. The files object.cpp and object.h hold the class and
+function definitions for the objects. The dungeon holds a separate map for where
+each object is located. When a character moves over an object, it disappears
+from sight, but is rendered again when the character moves to a different space.
+Currently, each monster only displays its first color when not concealed.
