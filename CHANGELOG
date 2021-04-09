@@ -78,3 +78,8 @@
 1.08
 4/07/2021 23:30 ; (Frank) added symbol speed and characteristics for generation
 4/08/2021 16:00 ; (Frank) added color, began work on unique monsters
+4/08/2021 16:30 ; (Amon) began work on objects
+4/08/2021 17:30 ; (Amon) created object.h and object.cpp
+4/08/2021 19:00 ; (Frank) got objects to spawn with characteristics
+4/08/2021 20:30 ; (Frank) fixed problem with uniqueness of objects/monsters
+4/08/2021 21:00 ; (Amon) confirmed object interactability

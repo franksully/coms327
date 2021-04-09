@@ -88,11 +88,14 @@ int main(int argc, char *argv[])
   char *pgm_file;
   
   parse_descriptions(&d);
-  //print_descriptions(&d);
-  //destroy_descriptions(&d);
-
-  //return 0;
   
+	/*
+	print_descriptions(&d);
+  destroy_descriptions(&d);
+
+  return 0;
+  */
+	
   /* Default behavior: Seed with the time, generate a new dungeon, *
    * and don't write to disk.                                      */
   do_load = do_save = do_image = do_save_seed = do_save_image = 0;
@@ -128,6 +131,14 @@ int main(int argc, char *argv[])
               (long_arg && strcmp(argv[i], "-nummon")) ||
               argc < ++i + 1 /* No more arguments */ ||
               !sscanf(argv[i], "%hu", &d.max_monsters)) {
+            usage(argv[0]);
+          }
+          break;
+				case 'o':
+          if ((!long_arg && argv[i][2]) ||
+              (long_arg && strcmp(argv[i], "-numobj")) ||
+              argc < ++i + 1 /* No more arguments */ ||
+              !sscanf(argv[i], "%hu", &d.max_objects)) {
             usage(argv[0]);
           }
           break;

@@ -50,13 +50,17 @@ void gen_objects(dungeon *d)
   d->num_objects = min(d->max_objects, max_object_cells(d));
 	uint32_t list_size = d->object_descriptions.size();
 
+	for (uint32_t i = 0; i < list_size; i++) {
+		d->object_descriptions[i].unique_spawn = 0;
+	}
+
   for (i = 0; i < d->num_objects; i++) {
     m = new object;
     //memset(m, 0, sizeof (*m));
 		*m = object{};
 		
     do {
-      room = rand_range(1, d->num_rooms - 1);
+      room = rand_range(0, d->num_rooms - 1);
       p[dim_y] = rand_range(d->rooms[room].position[dim_y],
                             (d->rooms[room].position[dim_y] +
                              d->rooms[room].size[dim_y] - 1));
@@ -70,7 +74,8 @@ void gen_objects(dungeon *d)
 		
 		uint32_t rand_list = rand() % list_size;
 		uint32_t rand_rarity = 100;
-		while (rand_rarity >= d->object_descriptions[rand_list].get_rarity()) {
+		while (rand_rarity >= d->object_descriptions[rand_list].get_rarity() || 
+													d->object_descriptions[rand_list].unique_spawn) {
 			rand_list = rand() % list_size;
 			rand_rarity = rand() % 100;
 		}
@@ -88,6 +93,10 @@ void gen_objects(dungeon *d)
 		m->rarity = d->object_descriptions[rand_list].get_rarity();
 		m->color_index = d->object_descriptions[rand_list].get_color();
 		m->has_seen = 0;
+		
+		if (d->object_descriptions[rand_list].get_artifact()) {
+			d->object_descriptions[rand_list].unique_spawn = 1;
+		}
 
     d->object_map[p[dim_y]][p[dim_x]] = m;
   }

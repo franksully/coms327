@@ -40,14 +40,14 @@ void gen_monsters(dungeon *d)
   d->num_monsters = min(d->max_monsters, max_monster_cells(d));
 	uint32_t list_size = d->monster_descriptions.size();
 
+	for (uint32_t i = 0; i < list_size; i++) {
+		d->monster_descriptions[i].unique_spawn = 0;
+	}
+	
   for (i = 0; i < d->num_monsters; i++) {
     m = new npc;
     //memset(m, 0, sizeof (*m));
 		*m = npc{};
-    
-		for (uint32_t i = 0; i < list_size; i++) {
-			d->monster_descriptions[i].unique_spawn = 0;
-		}
 		
     do {
       room = rand_range(1, d->num_rooms - 1);
@@ -64,7 +64,7 @@ void gen_monsters(dungeon *d)
 		
 		uint32_t rand_list = rand() % list_size;
 		uint32_t rand_rarity = 100;
-		while ((rand_rarity >= d->monster_descriptions[rand_list].rarity) && (!d->monster_descriptions[rand_list].unique_spawn)) {
+		while ((rand_rarity >= d->monster_descriptions[rand_list].rarity) || d->monster_descriptions[rand_list].unique_spawn) {
 			rand_list = rand() % list_size;
 			rand_rarity = rand() % 100;
 		}

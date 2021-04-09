@@ -76,6 +76,7 @@ class object_description {
   bool artifact;
   uint32_t rarity;
  public:
+  uint8_t unique_spawn;
   object_description() : name(),    description(), type(objtype_no_type),
                          color(0),  hit(),         damage(),
                          dodge(),   defence(),     weight(),

@@ -59,7 +59,7 @@ void do_combat(dungeon *d, character *atk, character *def)
     if (def != d->PC) {
       d->num_monsters--;
 			if (d->monster_descriptions[def->list_index].abilities & NPC_UNIQ) {
-				d->monster_descriptions[def->list_index].rarity = -1;
+				d->monster_descriptions[def->list_index].rarity = 0;
 			}
     } else {
       if ((part = rand() % (sizeof (organs) / sizeof (organs[0]))) < 26) {
