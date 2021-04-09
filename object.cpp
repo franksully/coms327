@@ -11,6 +11,15 @@
 #include "pc.h"
 #include "object.h"
 
+void object_delete(object *o)
+{
+  delete o;
+}
+
+int16_t *object_get_pos(object *o)
+{
+  return o->position;
+}
 
 static uint32_t max_object_cells(dungeon *d)
 {
@@ -65,6 +74,20 @@ void gen_objects(dungeon *d)
 			rand_list = rand() % list_size;
 			rand_rarity = rand() % 100;
 		}
+		
+		m->artifact = d->object_descriptions[rand_list].get_artifact();
+		m->type = d->object_descriptions[rand_list].get_type();
+		m->damage = d->object_descriptions[rand_list].get_damage();
+		m->hit = d->object_descriptions[rand_list].get_hit().roll();
+		m->dodge = d->object_descriptions[rand_list].get_dodge().roll();
+		m->defense = d->object_descriptions[rand_list].get_defence().roll();
+		m->weight = d->object_descriptions[rand_list].get_weight().roll();
+		m->speed = d->object_descriptions[rand_list].get_speed().roll();
+		m->attribute = d->object_descriptions[rand_list].get_attribute().roll();
+		m->value = d->object_descriptions[rand_list].get_value().roll();
+		m->rarity = d->object_descriptions[rand_list].get_rarity();
+		m->color_index = d->object_descriptions[rand_list].get_color();
+		
 
     d->object_map[p[dim_y]][p[dim_x]] = m;
   }
@@ -73,4 +96,72 @@ void gen_objects(dungeon *d)
 uint32_t dungeon_has_objects(dungeon *d)
 {
   return d->num_objects;
+}
+
+char object_get_symbol(const object *o)
+{
+	switch (o->type) {
+		case 1:
+			return '|';
+			break;
+		case 2:
+			return ')';
+			break;
+		case 3:
+			return '}';
+			break;
+		case 4:
+			return '_';
+			break;
+		case 5:
+			return '[';
+			break;
+		case 6:
+			return ']';
+			break;
+		case 7:
+			return '(';
+			break;
+		case 8:
+			return '{';
+			break;
+		case 9:
+			return '\\';
+			break;
+		case 10:
+			return '\"';
+			break;
+		case 11:
+			return '=';
+			break;
+		case 12:
+			return '~';
+			break;
+		case 13:
+			return '?';
+			break;
+		case 14:
+			return '!';
+			break;
+		case 15:
+			return '$';
+			break;
+		case 16:
+			return '/';
+			break;
+		case 17:
+			return ',';
+			break;
+		case 18:
+			return '-';
+			break;
+		case 19:
+			return '%';
+			break;
+		case 20:
+			return '&';
+			break;
+		default:
+			return '*';
+	}
 }

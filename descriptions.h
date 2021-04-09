@@ -33,7 +33,8 @@ typedef enum object_type {
   objtype_AMMUNITION,
   objtype_FOOD,
   objtype_WAND,
-  objtype_CONTAINER
+  objtype_CONTAINER,
+	objtype_STACK
 } object_type_t;
 
 extern const char object_symbol[];
@@ -112,6 +113,7 @@ class object_description {
   inline const dice &get_attribute() const { return attribute; }
   inline const dice &get_value() const { return value; }
 	inline const uint32_t get_rarity() const { return rarity; }
+	inline const bool get_artifact() const { return artifact; }
 };
 
 std::ostream &operator<<(std::ostream &o, monster_description &m);

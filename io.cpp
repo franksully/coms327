@@ -9,6 +9,7 @@
 #include "pc.h"
 #include "utils.h"
 #include "dungeon.h"
+#include "object.h"
 
 /* Same ugly hack we did in path.c */
 static dungeon *thedungeon;
@@ -222,6 +223,15 @@ void io_display(dungeon *d)
                 character_get_symbol(d->character_map[y][x]));
         visible_monsters++;
 				attroff(COLOR_PAIR(d->character_map[y][x]->color_index));
+			} else if (d->object_map[y][x] &&
+           can_see(d,
+                  character_get_pos(d->PC),
+                  object_get_pos(d->object_map[y][x]),
+                  1, 0)) {
+				attron(COLOR_PAIR(d->object_map[y][x]->color_index));
+				mvaddch(y + 1, x,
+                object_get_symbol(d->object_map[y][x]));
+				attroff(COLOR_PAIR(d->object_map[y][x]->color_index));
       } else {
         switch (pc_learned_terrain(d->PC, y, x)) {
         case ter_wall:
@@ -296,6 +306,11 @@ void io_display_no_fog(dungeon *d)
 				attron(COLOR_PAIR(d->character_map[y][x]->color_index));
         mvaddch(y + 1, x, d->character_map[y][x]->symbol);
 				attroff(COLOR_PAIR(d->character_map[y][x]->color_index));
+			} else if (d->object_map[y][x]) {
+				attron(COLOR_PAIR(d->object_map[y][x]->color_index));
+				mvaddch(y + 1, x,
+                object_get_symbol(d->object_map[y][x]));
+				attroff(COLOR_PAIR(d->object_map[y][x]->color_index));
       } else {
         switch (mapxy(x, y)) {
         case ter_wall:
