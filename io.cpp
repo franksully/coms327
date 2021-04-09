@@ -223,14 +223,15 @@ void io_display(dungeon *d)
                 character_get_symbol(d->character_map[y][x]));
         visible_monsters++;
 				attroff(COLOR_PAIR(d->character_map[y][x]->color_index));
-			} else if (d->object_map[y][x] &&
+			} else if (d->object_map[y][x] && (
            can_see(d,
                   character_get_pos(d->PC),
                   object_get_pos(d->object_map[y][x]),
-                  1, 0)) {
+                  1, 0) || d->object_map[y][x]->has_seen)) {
 				attron(COLOR_PAIR(d->object_map[y][x]->color_index));
 				mvaddch(y + 1, x,
                 object_get_symbol(d->object_map[y][x]));
+				d->object_map[y][x]->has_seen = 1;
 				attroff(COLOR_PAIR(d->object_map[y][x]->color_index));
       } else {
         switch (pc_learned_terrain(d->PC, y, x)) {

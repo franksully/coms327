@@ -10,6 +10,7 @@
 #include "move.h"
 #include "utils.h"
 #include "io.h"
+#include "object.h"
 
 const char *victory =
   "\n                                       o\n"

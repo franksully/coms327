@@ -11,7 +11,7 @@ class object {
 		object_type_t type;
 		dice damage;
 		int32_t hit, dodge, defense, weight, speed, attribute, value, rarity;
-		bool artifact;
+		bool artifact, has_seen;
 		uint32_t color_index;
 		pair_t position;
 };

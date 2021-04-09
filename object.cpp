@@ -87,7 +87,7 @@ void gen_objects(dungeon *d)
 		m->value = d->object_descriptions[rand_list].get_value().roll();
 		m->rarity = d->object_descriptions[rand_list].get_rarity();
 		m->color_index = d->object_descriptions[rand_list].get_color();
-		
+		m->has_seen = 0;
 
     d->object_map[p[dim_y]][p[dim_x]] = m;
   }
