@@ -865,6 +865,110 @@ static void io_list_monsters(dungeon *d)
   io_display(d);
 }
 
+static void io_list_inventory(dungeon *d)
+{
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 10; i++){
+  	if(d->PC->inventory[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->inventory[i]->get_name());
+  	}
+  }
+
+  mvprintw(16, 9, " %-60s ", "");
+  mvprintw(17, 9, " %-60s ",
+           "Escape to continue.");
+	while (getch() != 27 /* escape */){}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+static void wear_item(dungeon *d, int num){
+	if(d->PC->inventory[num] == NULL){
+		return;
+	}
+	int32_t type = d->PC->inventory[num]->get_type();
+	for(int i = 0; i < 12; i++){
+		if(d->PC->equipped[i] != NULL){
+			if(d->PC->equipped[i]->get_type() == type){
+				object *temp = d->PC->equipped[num]; 
+				d->PC->equipped[num] = d->PC->inventory[num];
+				d->PC->inventory[num] = temp;
+				return;
+			}
+		}
+	}
+	for(int i = 0; i < 12; i++){
+		if(d->PC->equipped[i] == NULL){
+			d->PC->equipped[i] = d->PC->inventory[num]; 
+			d->PC->inventory[num] = NULL;
+			return;
+		}
+	}
+}
+static void io_wear_item(dungeon *d)
+{
+	int key;
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 10; i++){
+  	if(d->PC->inventory[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->inventory[i]->get_name());
+  	}
+  }
+
+  mvprintw(16, 9, " %-60s ", "What item would you like to wear?(0-9)");
+  mvprintw(17, 9, " %-60s ",
+           "Any other button to continue.");
+ 
+	switch (key = getch()) {
+	  case '0':
+	    wear_item(d, 0);
+	    break;
+	  case '1':
+	    wear_item(d, 1);
+	    break;
+	  case '2':
+	    wear_item(d, 2);
+	    break;
+	  case '3':
+	    wear_item(d, 3);
+	    break;
+	  case '4':
+	    wear_item(d, 4);
+	    break;
+	  case '5':
+	    wear_item(d, 5);
+	    break;
+	  case '6':
+	    wear_item(d, 6);
+	    break;
+	  case '7':
+	    wear_item(d, 7);
+	    break;
+	  case '8':
+	    wear_item(d, 8);
+	    break;
+	  case '9':
+	    wear_item(d, 9);
+	    break;
+	  case 27:/* escape */
+	  	break;
+	  default:
+	  	mvprintw(18, 9, " %-60s ","%s is not valid ", key);
+	}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+
+
 void io_handle_input(dungeon *d)
 {
   uint32_t fail_code;
@@ -968,9 +1072,6 @@ void io_handle_input(dungeon *d)
       io_display(d);
       fail_code = 1;
       break;
-    case 'L':
-      fail_code = 1;
-      break;
     case 'g':
       /* Teleport the PC to a random place in the dungeon.              */
       io_teleport_pc(d);
@@ -980,17 +1081,49 @@ void io_handle_input(dungeon *d)
       io_display_no_fog(d);
       fail_code = 1;
       break;
-     case 'm':
+    case 'm':
       io_list_monsters(d);
       fail_code = 1;
       break;
+    case 'w':
+      io_wear_item(d);
+      fail_code = 1;
+      break;
+    case 't':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'd':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'x':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'i':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'e':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'I':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;
+    case 'L':
+      io_list_inventory(d);
+      fail_code = 1;
+      break;  
     case 'q':
       /* Demonstrate use of the message queue.  You can use this for *
        * printf()-style debugging (though gdb is probably a better   *
        * option.  Not that it matterrs, but using this command will  *
        * waste a turn.  Set fail_code to 1 and you should be able to *
        * figure out why I did it that way.                           */
-      io_queue_message("This is the first message.");
+    	io_queue_message("This is the first message.");
       io_queue_message("Since there are multiple messages, "
                        "you will see \"more\" prompts.");
       io_queue_message("You can use any key to advance through messages.");

@@ -3,6 +3,7 @@
 
 # include <stdint.h>
 
+# include "object.h"
 # include "dims.h"
 # include "character.h"
 # include "dungeon.h"
@@ -10,6 +11,8 @@
 class pc : public character {
  public:
   ~pc() {}
+  object *equipped[12] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL}; 
+  object *inventory[10] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
   terrain_type known_terrain[DUNGEON_Y][DUNGEON_X];
   uint8_t visible[DUNGEON_Y][DUNGEON_X];
 	const dice *damage_weapon;
