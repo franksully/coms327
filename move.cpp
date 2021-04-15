@@ -123,6 +123,7 @@ void do_combat(dungeon *d, character *atk, character *def)
 			else {
 				def->alive = 0;
 				charpair(def->position) = NULL;
+				d->num_monsters--;
 				io_queue_message("You kill %s%s!", is_unique(def) ? "" : "the ", def->name);
 				atk->kills[kill_direct]++;
 				atk->kills[kill_avenged] += (def->kills[kill_direct] +
