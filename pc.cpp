@@ -30,7 +30,7 @@ void place_pc(dungeon *d)
 
 void config_pc(dungeon *d)
 {
-  static dice pc_dice(0, 1, 4);
+  static dice pc_dice(100000, 1, 4);
   
   d->PC = new pc;
 
@@ -39,6 +39,7 @@ void config_pc(dungeon *d)
   place_pc(d);
 
   d->PC->speed = PC_SPEED;
+	d->PC->hp = PC_HP;
   d->PC->alive = 1;
   d->PC->sequence_number = 0;
   d->PC->kills[kill_direct] = d->PC->kills[kill_avenged] = 0;

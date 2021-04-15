@@ -16,9 +16,20 @@
 #include "io.h"
 #include "npc.h"
 
+void swap_characters(dungeon *d, character *atk, character *def) {
+	static pair_t temp;
+	temp[dim_y] = atk->position[dim_y];
+	temp[dim_x] = atk->position[dim_x];
+	d->character_map[atk->position[dim_y]][atk->position[dim_x]] = def;
+	atk->position[dim_y] = def->position[dim_y];
+	atk->position[dim_x] = def->position[dim_x];
+	d->character_map[def->position[dim_y]][def->position[dim_x]] = atk;
+	def->position[dim_y] = temp[dim_y];
+	def->position[dim_x] = temp[dim_x];
+}
+
 void do_combat(dungeon *d, character *atk, character *def)
 {
-  int can_see_atk, can_see_def;
   const char *organs[] = {
     "liver",                   /*  0 */
     "pancreas",                /*  1 */
@@ -53,46 +64,84 @@ void do_combat(dungeon *d, character *atk, character *def)
   };
   int part;
 
+	int32_t damage_dealt = atk->damage->roll();
+
   if (def->alive) {
+		/*
     def->alive = 0;
     charpair(def->position) = NULL;
-    
-    if (def != d->PC) {
-      d->num_monsters--;
-    } else {
-      if ((part = rand() % (sizeof (organs) / sizeof (organs[0]))) < 26) {
-        io_queue_message("As %s%s eats your %s,", is_unique(atk) ? "" : "the ",
+    */
+		
+    if (def != d->PC && atk != d->PC) {
+      swap_characters(d, atk, def);
+			
+			int can_see_atk, can_see_def;
+			can_see_atk = can_see(d, character_get_pos(d->PC),
+														character_get_pos(atk), 1, 0);
+			can_see_def = can_see(d, character_get_pos(d->PC),
+														character_get_pos(def), 1, 0);
+			
+			if (can_see_atk || can_see_def) {
+				io_queue_message("%s%s swaps with %s%s", is_unique(atk) ? "" : "The ",
+													atk->name, is_unique(def) ? "" : "the ", def->name);
+			}
+    } else if (def == d->PC) {
+			def->hp -= damage_dealt;
+			if (def->hp > 0) {
+				io_queue_message("%s%s hits you for %d! (%d)", is_unique(atk) ? "" : "The ",
+												atk->name, damage_dealt, def->hp);
+			}
+			else {
+				def->alive = 0;
+				charpair(def->position) = NULL;
+				if ((part = rand() % (sizeof (organs) / sizeof (organs[0]))) < 26) {
+					io_queue_message("As %s%s eats your %s,", is_unique(atk) ? "" : "the ",
                          atk->name, organs[rand() % (sizeof (organs) /
                                                      sizeof (organs[0]))]);
-        io_queue_message("   ...you wonder if there is an afterlife.");
-        /* Queue an empty message, otherwise the game will not pause for *
-         * player to see above.                                          */
-        io_queue_message("");
-      } else {
-        io_queue_message("Your last thoughts fade away as "
-                         "%s%s eats your %s...",
-                         is_unique(atk) ? "" : "the ",
-                         atk->name, organs[part]);
-        io_queue_message("");
-      }
+					io_queue_message("   ...you wonder if there is an afterlife.");
+					/* Queue an empty message, otherwise the game will not pause for *
+					* player to see above.                                          */
+					//io_queue_message("");
+				} else {
+					io_queue_message("Your last thoughts fade away as "
+													"%s%s eats your %s...",
+													is_unique(atk) ? "" : "the ",
+													atk->name, organs[part]);
+					//io_queue_message("");
+				}
+			}
       /* Queue an empty message, otherwise the game will not pause for *
        * player to see above.                                          */
       io_queue_message("");
-    }
-    atk->kills[kill_direct]++;
-    atk->kills[kill_avenged] += (def->kills[kill_direct] +
-                                  def->kills[kill_avenged]);
-  }
+			}
+		else {
+			def->hp -= damage_dealt;
+			if (def->hp > 0) {
+				io_queue_message("You hit %s%s for %d! (%d)", is_unique(def) ? "" : "the ", 
+													def->name, damage_dealt, def->hp);
+			}
+			else {
+				def->alive = 0;
+				charpair(def->position) = NULL;
+				io_queue_message("You kill %s%s!", is_unique(def) ? "" : "the ", def->name);
+				atk->kills[kill_direct]++;
+				atk->kills[kill_avenged] += (def->kills[kill_direct] +
+																		def->kills[kill_avenged]);
+			}
+			//io_queue_message("");
+		}
+	}
 
+	/*
   if (atk == d->PC) {
     io_queue_message("You smite %s%s!", is_unique(def) ? "" : "the ", def->name);
   }
+	*/
 
-  can_see_atk = can_see(d, character_get_pos(d->PC),
-                        character_get_pos(atk), 1, 0);
-  can_see_def = can_see(d, character_get_pos(d->PC),
-                        character_get_pos(def), 1, 0);
+  
+	
 
+	/*
   if (atk != d->PC && def != d->PC) {
     if (can_see_atk && !can_see_def) {
       io_queue_message("%s%s callously murders some poor, "
@@ -110,6 +159,7 @@ void do_combat(dungeon *d, character *atk, character *def)
                        is_unique(def) ? "" : "the ", def->name);
     }
   }
+	*/
 }
 
 void move_character(dungeon *d, character *c, pair_t next)
