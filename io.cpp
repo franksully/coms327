@@ -886,6 +886,30 @@ static void io_list_inventory(dungeon *d)
   /* And redraw the dungeon */
   io_display(d);
 }
+
+static void io_list_equipped(dungeon *d)
+{
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 12; i++){
+  	if(d->PC->equipped[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->equipped[i]->get_name());
+  	}
+  }
+
+  mvprintw(18, 9, " %-60s ", "");
+  mvprintw(19, 9, " %-60s ",
+           "Escape to continue.");
+	while (getch() != 27 /* escape */){}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+
+
 static void wear_item(dungeon *d, int num){
 	if(d->PC->inventory[num] == NULL){
 		return;
@@ -894,8 +918,8 @@ static void wear_item(dungeon *d, int num){
 	for(int i = 0; i < 12; i++){
 		if(d->PC->equipped[i] != NULL){
 			if(d->PC->equipped[i]->get_type() == type){
-				object *temp = d->PC->equipped[num]; 
-				d->PC->equipped[num] = d->PC->inventory[num];
+				object *temp = d->PC->equipped[i]; 
+				d->PC->equipped[i] = d->PC->inventory[num];
 				d->PC->inventory[num] = temp;
 				return;
 			}
@@ -925,7 +949,7 @@ static void io_wear_item(dungeon *d)
 
   mvprintw(16, 9, " %-60s ", "What item would you like to wear?(0-9)");
   mvprintw(17, 9, " %-60s ",
-           "Any other button to continue.");
+           "Any other button to continue since I got tired of pressing escape.");
  
 	switch (key = getch()) {
 	  case '0':
@@ -1106,7 +1130,7 @@ void io_handle_input(dungeon *d)
       fail_code = 1;
       break;
     case 'e':
-      io_list_inventory(d);
+      io_list_equipped(d);
       fail_code = 1;
       break;
     case 'I':
