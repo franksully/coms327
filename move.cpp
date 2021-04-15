@@ -130,6 +130,14 @@ void move_character(dungeon *d, character *c, pair_t next)
   if (c == d->PC) {
     pc_reset_visibility(d->PC);
     pc_observe_terrain(d->PC, d);
+    if(d->objmap[c->position[dim_y]][c->position[dim_x]]){
+    	for(int i = 0; i < 10; i++){
+		  	if(d->PC->inventory[i] == NULL){
+					d->PC->inventory[i] = d->objmap[c->position[dim_y]][c->position[dim_x]];
+					d->objmap[c->position[dim_y]][c->position[dim_x]] = NULL;
+		  	}
+    	}
+    }
   }
 }
 
