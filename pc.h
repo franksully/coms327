@@ -12,6 +12,7 @@ class pc : public character {
   ~pc() {}
   terrain_type known_terrain[DUNGEON_Y][DUNGEON_X];
   uint8_t visible[DUNGEON_Y][DUNGEON_X];
+	const dice *damage_weapon;
 };
 
 void pc_delete(pc *pc);
