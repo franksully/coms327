@@ -1,0 +1,86 @@
+1.01
+2/10/2021 14:00 ; (Amon) began work, added code for filling rooms array
+2/10/2021 21:24 ; (Frank) adjusted values, added function for printing table
+2/10/2021 22:00 ; (Amon) added function for checking room overlaps
+2/10/2021 22:30 ; (Frank) ensured rooms stay within bounds, fixed printing of table
+2/11/2021 11:49 ; (Frank) implemented Amon's function for checking room overlaps
+2/11/2021 13:53 ; (Frank) moved table initialization to function initTable()
+2/11/2021 14:05 ; (Amon) added initCorridor() prototype
+2/11/2021 15:23 ; (Frank) added the placement of stairs
+2/11/2021 19:18 ; (Amon) implemented function for adding corridors
+
+1.02
+2/18/2021 15:00 ; Replaced code with class sample "rlg327-s2021-1.01"
+2/18/2021 16:00 ; (Amon) began work on file_save() function
+2/18/2021 18:45 ; (Frank) implemented most of file_load() functionality
+2/18/2021 20:09 ; (Frank) added full functionality of file_load()
+2/18/2021 21:00 ; (Amon) finished implementation of file_save()
+2/18/2021 21:20 ; (Amon) fixed file size in file_save()
+2/18/2021 21:30 ; (Frank) added placement of player character
+
+1.03
+2/23/2021 22:30 ; Replaced code with class sample "rlg327-s2021-1.02"
+2/24/2021 23:00 ; (Frank) began work on dijkstra_monster_nodig()
+2/25/2021 12:05 ; (Frank) implemented distance map for non-tunneling monsters
+2/25/2021 13:30 ; (Amon) began work in dijkstra_monster_dig()
+2/25/2021 15:20 ; (Frank) added functions for displaying both distance maps
+2/25/2021 15:40 ; (Amon) corrected function for displaying non-tunneling map
+2/25/2021 16:30 ; (Frank) corrected values for comparisons in Dijkstra algorithm
+
+1.04
+3/02/2021 14:30 ; Replaced code with class sample "rlg327-s2021-1.03"
+3/02/2021 16:00 ; (Frank) modified structs in dungeon.h
+3/04/2021 14:00 ; (Amon) added tag for --nummon
+3/04/2021 15:00 ; (Frank) added init_characters() function
+3/04/2021 15:30 ; (Amon) added loop for each turn
+3/04/2021 16:00 ; (Frank) modified render_dungeon() to show pc and npcs
+3/04/2021 17:00 ; (Amon) added IDs to monster initialization
+3/04/2021 17:40 ; (Frank) modified render_dungeon() to represent IDs
+3/04/2021 19:00 ; (Amon) added move() function
+
+1.05
+3/09/2021 18:00 ; Replaced code with class sample "rlg327-s2021-1.04"
+3/10/2021 22:00 ; (Amon) converted code to curses format
+3/10/2021 23:30 ; (Frank) added manual PC movement
+3/11/2021 11:40 ; (Frank) fixed PC tunneling issues
+3/11/2021 15:30 ; (Frank) implemented moving between levels in dungeon
+3/11/2021 16:00 ; (Amon) began work on monster list
+3/11/2021 16:30 ; (Frank) continued work on monster list
+3/11/2021 17:00 ; (Amon) fixed formatting for monster list
+3/11/2021 18:30 ; (Amon) added scrolling to monster list
+3/11/2021 19:30 ; (Frank) tweaked formatting, added quitting from list
+3/11/2021 20:00 ; (Frank) modified the janky loops
+3/11/2021 20:30 ; (Amon) updated list_loop()
+3/11/2021 21:00 ; (Frank) made things look pretty :)
+
+1.06
+3/24/2021 21:00 ; (Frank) changed file extensions, modified Makefile
+3/25/2021 14:00 ; (Frank) made first debugging changes for converting to C++
+3/25/2021 15:30 ; (Frank) converted code to C++ (excluding heap.c)
+3/25/2021 16:00 ; (Amon) began work on teleport implementation
+3/25/2021 16:30 ; (Frank) added fog of war
+3/25/2021 17:30 ; (Amon) implemented pc teleportation
+3/25/2021 18:20 ; (Amon) added bounds to teleportation
+3/25/2021 18:30 ; (Frank) fixed fog of war for monsters and teleporting
+3/25/2021 18:40 ; (Amon) corrected bounds for teleportation
+3/25/2021 18:50 ; (Frank) replaced structs in dungeon.cpp
+
+1.07
+3/31/2021 15:30 ; (Frank) began work on parser.cpp and parser.h
+3/31/2021 16:40 ; (Frank) began implementation of parse_monsters() function
+4/01/2021 16:00 ; (Amon) allowed reading of each file segment
+4/01/2021 19:00 ; (Frank) turned things into numbers
+4/01/2021 20:00 ; (Amon) worked on colors
+4/01/2021 21:00 ; (Frank) worked on abilities
+4/01/2021 21:30 ; (Amon) got it to succesfully print 
+4/01/2021 22:04 ; (Amon) modified the changelog
+
+1.08
+4/07/2021 23:30 ; (Frank) added symbol speed and characteristics for generation
+4/08/2021 16:00 ; (Frank) added color, began work on unique monsters
+4/08/2021 16:30 ; (Amon) began work on objects
+4/08/2021 17:30 ; (Amon) created object.h and object.cpp
+4/08/2021 19:00 ; (Frank) got objects to spawn with characteristics
+4/08/2021 20:30 ; (Frank) fixed problem with uniqueness of objects/monsters
+4/08/2021 21:00 ; (Amon) confirmed object interactability
+
