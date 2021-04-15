@@ -16,19 +16,20 @@
 #include "io.h"
 #include "npc.h"
 
-void swap_characters(character *atk, character *def) {
+void swap_characters(dungeon *d, character *atk, character *def) {
 	static pair_t temp;
 	temp[dim_y] = atk->position[dim_y];
 	temp[dim_x] = atk->position[dim_x];
+	d->character_map[atk->position[dim_y]][atk->position[dim_x]] = def;
 	atk->position[dim_y] = def->position[dim_y];
 	atk->position[dim_x] = def->position[dim_x];
+	d->character_map[def->position[dim_y]][def->position[dim_x]] = atk;
 	def->position[dim_y] = temp[dim_y];
 	def->position[dim_x] = temp[dim_x];
 }
 
 void do_combat(dungeon *d, character *atk, character *def)
 {
-  //int can_see_atk, can_see_def;
   const char *organs[] = {
     "liver",                   /*  0 */
     "pancreas",                /*  1 */
@@ -72,9 +73,18 @@ void do_combat(dungeon *d, character *atk, character *def)
     */
 		
     if (def != d->PC && atk != d->PC) {
-      swap_characters(atk, def);
-			io_queue_message("%s%s swaps with %s%s", is_unique(atk) ? "" : "The ",
-												atk->name, is_unique(def) ? "" : "the ", atk->name);
+      swap_characters(d, atk, def);
+			
+			int can_see_atk, can_see_def;
+			can_see_atk = can_see(d, character_get_pos(d->PC),
+														character_get_pos(atk), 1, 0);
+			can_see_def = can_see(d, character_get_pos(d->PC),
+														character_get_pos(def), 1, 0);
+			
+			if (can_see_atk || can_see_def) {
+				io_queue_message("%s%s swaps with %s%s", is_unique(atk) ? "" : "The ",
+													atk->name, is_unique(def) ? "" : "the ", def->name);
+			}
     } else if (def == d->PC) {
 			def->hp -= damage_dealt;
 			if (def->hp > 0) {
@@ -102,7 +112,7 @@ void do_combat(dungeon *d, character *atk, character *def)
 			}
       /* Queue an empty message, otherwise the game will not pause for *
        * player to see above.                                          */
-      //io_queue_message("");
+      io_queue_message("");
 			}
 		else {
 			def->hp -= damage_dealt;
@@ -126,12 +136,10 @@ void do_combat(dungeon *d, character *atk, character *def)
   if (atk == d->PC) {
     io_queue_message("You smite %s%s!", is_unique(def) ? "" : "the ", def->name);
   }
-
-  can_see_atk = can_see(d, character_get_pos(d->PC),
-                        character_get_pos(atk), 1, 0);
-  can_see_def = can_see(d, character_get_pos(d->PC),
-                        character_get_pos(def), 1, 0);
 	*/
+
+  
+	
 
 	/*
   if (atk != d->PC && def != d->PC) {
