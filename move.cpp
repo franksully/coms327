@@ -63,8 +63,21 @@ void do_combat(dungeon *d, character *atk, character *def)
     "brain",                   /* 29 */
   };
   int part;
+	int32_t damage_dealt = 0;
 
-	int32_t damage_dealt = atk->damage->roll();
+	if (atk != d->PC) {
+		damage_dealt = atk->damage->roll();
+	}
+	else {
+		for (int i = 0; i < 12; i++) {
+			if (d->PC->equipped[i]) {
+				damage_dealt += d->PC->equipped[i]->roll_dice();
+			}
+		}
+		if (!has_weapon(d->PC)) {
+			damage_dealt += atk->damage->roll();
+		}
+	}
 
   if (def->alive) {
 		/*
