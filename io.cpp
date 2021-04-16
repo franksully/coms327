@@ -1381,7 +1381,7 @@ void io_inspect_monster_pc(dungeon *d)
       tv.tv_sec = 0;
       tv.tv_usec = 125000; /* An eigth of a second */
 
-      io_redisplay_non_terrain(d, dest);
+      //io_redisplay_non_terrain(d, dest);
     } while (!select(STDIN_FILENO + 1, &readfs, NULL, NULL, &tv));
     /* Can simply draw the terrain when we move the cursor away, *
      * because if it is a character or object, the refresh       *
