@@ -918,6 +918,9 @@ static void io_list_equipped(dungeon *d)
 
 static void wear_item(dungeon *d, int num){
 	if(d->PC->inventory[num] == NULL){
+		mvprintw(16, 9, " %-60s ",
+         "you attempt to put on nothing any button to move on");
+    getch();
 		return;
 	}
 	int32_t type = d->PC->inventory[num]->get_type();
@@ -929,7 +932,7 @@ static void wear_item(dungeon *d, int num){
 				d->PC->inventory[num] = temp;
 				mvprintw(6 + i, 9, " %-60d. ", i);
 				mvprintw(16, 9, " %-60s ",
-           "Good job you put on clothes any button to move on");
+           "Good job you exchanged your equipped  any button to move on");
 				getch();
 				return;
 			}
@@ -946,6 +949,10 @@ static void wear_item(dungeon *d, int num){
 			return;
 		}
 	}
+	mvprintw(16, 9, " %-60s ",
+       "You have nowhere to put that any button to move on");
+  getch();
+	return;
 }
 
 static void io_wear_item(dungeon *d)
@@ -1007,7 +1014,11 @@ static void io_wear_item(dungeon *d)
   io_display(d);
 }
 static void strip(dungeon *d, int num){
+	
 	if(d->PC->equipped[num] == NULL){
+		mvprintw(16, 9, " %-60s ",
+           "there is nothing to take off any button to move on");
+           getch();
 		return;
 	}
 	for(int i = 0; i < 9; i++){
@@ -1021,6 +1032,10 @@ static void strip(dungeon *d, int num){
 			return;
 		}
 	}
+	mvprintw(16, 9, " %-60s ",
+           "You find yourself with too many items to strip button to move on");
+  getch();
+	return;
 	
 }
 
@@ -1089,6 +1104,411 @@ static void io_strip(dungeon *d)
   io_display(d);
 }
 
+static void drop_item(dungeon *d, int num){
+	if(d->PC->inventory[num] == NULL){
+		mvprintw(16, 9, " %-60s ",
+           "there is nothing to drop any button to move on");
+				getch();
+		return;
+	}
+	if(d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]] != NULL){
+		mvprintw(16, 9, " %-60s ",
+           "you cant drop there as something is in the way any button to move on");
+				getch();
+		return;
+	}
+	d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]] = d->PC->inventory[num];
+	d->PC->inventory[num] = NULL;
+	mvprintw(6 + num, 9, " %-60d. ", num);
+	mvprintw(16, 9, " %-60s ",
+           "Good job you dropped stuff any button to move on");
+	getch();
+	return;
+}
+
+static void io_drop_item(dungeon *d)
+{
+	int key;
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 10; i++){
+  	if(d->PC->inventory[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->inventory[i]->get_name());
+  	}
+  }
+
+  mvprintw(16, 9, " %-60s ", "What item would you like to drop?(0-9)");
+  mvprintw(17, 9, " %-60s ",
+           "Any other button to continue since I got tired of pressing escape.");
+ 
+	switch (key = getch()) {
+	  case '0':
+	    drop_item(d, 0);
+	    break;
+	  case '1':
+	    drop_item(d, 1);
+	    break;
+	  case '2':
+	    drop_item(d, 2);
+	    break;
+	  case '3':
+	    drop_item(d, 3);
+	    break;
+	  case '4':
+	    drop_item(d, 4);
+	    break;
+	  case '5':
+	    drop_item(d, 5);
+	    break;
+	  case '6':
+	    drop_item(d, 6);
+	    break;
+	  case '7':
+	    drop_item(d, 7);
+	    break;
+	  case '8':
+	    drop_item(d, 8);
+	    break;
+	  case '9':
+	    drop_item(d, 9);
+	    break;
+	  case 27:/* escape */
+	  	break;
+	  default:
+	  	mvprintw(18, 9, " %-60s ","%s is not valid ", key);
+	}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+
+static void expunge_item(dungeon *d, int num){
+	if(d->PC->inventory[num] == NULL){
+		mvprintw(16, 9, " %-60s ",
+           "there is nothing to expunge any button to move on");
+				getch();
+		return;
+	}
+
+	delete d->PC->inventory[num];
+	d->PC->inventory[num] = NULL;
+	
+	mvprintw(6 + num, 9, " %-60d. ", num);
+	mvprintw(16, 9, " %-60s ",
+           "Good job you expunged that from existance any button to move on");
+	getch();
+	return;
+}
+
+static void io_expunge_item(dungeon *d)
+{
+	int key;
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 10; i++){
+  	if(d->PC->inventory[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->inventory[i]->get_name());
+  	}
+  }
+
+  mvprintw(16, 9, " %-60s ", "What item would you like to expunge?(0-9)");
+  mvprintw(17, 9, " %-60s ",
+           "Any other button to continue since I got tired of pressing escape.");
+ 
+	switch (key = getch()) {
+	  case '0':
+	    expunge_item(d, 0);
+	    break;
+	  case '1':
+	    expunge_item(d, 1);
+	    break;
+	  case '2':
+	    expunge_item(d, 2);
+	    break;
+	  case '3':
+	    expunge_item(d, 3);
+	    break;
+	  case '4':
+	    expunge_item(d, 4);
+	    break;
+	  case '5':
+	    expunge_item(d, 5);
+	    break;
+	  case '6':
+	    expunge_item(d, 6);
+	    break;
+	  case '7':
+	    expunge_item(d, 7);
+	    break;
+	  case '8':
+	    expunge_item(d, 8);
+	    break;
+	  case '9':
+	    expunge_item(d, 9);
+	    break;
+	  case 27:/* escape */
+	  	break;
+	  default:
+	  	mvprintw(18, 9, " %-60s ","%s is not valid ", key);
+	}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+
+static void inspect_item(dungeon *d, int num){
+	if(d->PC->inventory[num] == NULL){
+		mvprintw(16, 9, " %-60s ",
+         "as you sqiunt your I's your relize that you is dubm any button to move on");
+    getch();
+		return;
+	}
+	for(int i = 0; i < 10; i++){
+		mvprintw(6 + i, 9, " %-60s. ", "");
+	}
+
+	mvprintw(6, 35, " %-60s. ", d->PC->inventory[num]->get_name());
+	mvprintw(7, 0, " %-60s. ", d->PC->inventory[num]->get_description());
+
+	mvprintw(16, 9, " %-60s ",
+       "Any button to move on");
+  getch();
+	return;
+}
+
+static void io_inspect_item(dungeon *d)
+{
+	int key;
+  mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 10; i++){
+  	if(d->PC->inventory[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60d. ", i);
+  	}else{
+  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->inventory[i]->get_name());
+  	}
+  }
+
+  mvprintw(16, 9, " %-60s ", "What item would you like to inspect?(0-9)");
+  mvprintw(17, 9, " %-60s ",
+           "Any other button to continue since I got tired of pressing escape.");
+ 
+	switch (key = getch()) {
+	  case '0':
+	    inspect_item(d, 0);
+	    break;
+	  case '1':
+	    inspect_item(d, 1);
+	    break;
+	  case '2':
+	    inspect_item(d, 2);
+	    break;
+	  case '3':
+	    inspect_item(d, 3);
+	    break;
+	  case '4':
+	    inspect_item(d, 4);
+	    break;
+	  case '5':
+	    inspect_item(d, 5);
+	    break;
+	  case '6':
+	    inspect_item(d, 6);
+	    break;
+	  case '7':
+	    inspect_item(d, 7);
+	    break;
+	  case '8':
+	    inspect_item(d, 8);
+	    break;
+	  case '9':
+	    inspect_item(d, 9);
+	    break;
+	  case 27:/* escape */
+	  	break;
+	  default:
+	  	mvprintw(18, 9, " %-60s ","%s is not valid ", key);
+	}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+
+void io_inspect_monster_pc(dungeon *d)
+{
+  pair_t dest;
+  int c;
+  fd_set readfs;
+  struct timeval tv;
+
+  pc_reset_visibility(d->PC);
+  //io_display_no_fog(d);
+
+  mvprintw(0, 0,
+           "Choose a monster.  't' or abort with escape.");
+
+  dest[dim_y] = d->PC->position[dim_y];
+  dest[dim_x] = d->PC->position[dim_x];
+
+  mvaddch(dest[dim_y] + 1, dest[dim_x], '*');
+  refresh();
+
+  do {
+    do{
+      FD_ZERO(&readfs);
+      FD_SET(STDIN_FILENO, &readfs);
+
+      tv.tv_sec = 0;
+      tv.tv_usec = 125000; /* An eigth of a second */
+
+      io_redisplay_non_terrain(d, dest);
+    } while (!select(STDIN_FILENO + 1, &readfs, NULL, NULL, &tv));
+    /* Can simply draw the terrain when we move the cursor away, *
+     * because if it is a character or object, the refresh       *
+     * function will fix it for us.                              */
+    switch (mappair(dest)) {
+    case ter_wall:
+    case ter_wall_immutable:
+    case ter_unknown:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], ' ');
+      break;
+    case ter_floor:
+    case ter_floor_room:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '.');
+      break;
+    case ter_floor_hall:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '#');
+      break;
+    case ter_debug:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '*');
+      break;
+    case ter_stairs_up:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '<');
+      break;
+    case ter_stairs_down:
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '>');
+      break;
+    default:
+ /* Use zero as an error symbol, since it stands out somewhat, and it's *
+  * not otherwise used.                                                 */
+      mvaddch(dest[dim_y] + 1, dest[dim_x], '0');
+    }
+    switch ((c = getch())) {
+    case '7':
+    case 'y':
+    case KEY_HOME:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    case '8':
+    case 'k':
+    case KEY_UP:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      break;
+    case '9':
+    case 'u':
+    case KEY_PPAGE:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '6':
+    case 'l':
+    case KEY_RIGHT:
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '3':
+    case 'n':
+    case KEY_NPAGE:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '2':
+    case 'j':
+    case KEY_DOWN:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      break;
+    case '1':
+    case 'b':
+    case KEY_END:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    case '4':
+    case 'h':
+    case KEY_LEFT:
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    }
+  } while (c != 27 && c != 't');
+
+  if (c == 't') {
+  	if(!can_see(d, character_get_pos(d->PC),
+                dest, 1, 0)){
+        mvprintw(16, 9, " %-60s ", "you has bad eyes and cant see that any button to move on");
+        getch();
+        return;  
+     }
+  }
+  for(int i = 0; i < 10; i++){
+			mvprintw(6 + i, 9, " %-60s. ", "");
+		}
+  
+  if(charpair(dest) == d->PC){
+		mvprintw(7, 9, "As you invert your eyes and look upon yourself you cant help but feel attracted");
+
+		mvprintw(16, 9, " %-60s ",
+		     "Any button to move on");
+		getch();
+		return;
+  }
+  
+  if(d->character_map[dest[dim_y]][dest[dim_x]]){
+  	
+  	  mvprintw(16, 9, " %-60s ", "What item would you like to inspect?(0-9)");
+  mvprintw(17, 9, " %-60s ",
+             d->character_map[dest[dim_y]][dest[dim_x]]->character_get_description());
+ 		return;
+  }
+  
+		mvprintw(7, 9, "You see nothing there");
+
+		mvprintw(16, 9, " %-60s ",
+		     "Any button to move on");
+		getch();
+		return;
+  
+}
 
 void io_handle_input(dungeon *d)
 {
@@ -1215,11 +1635,11 @@ void io_handle_input(dungeon *d)
       fail_code = 1;
       break;
     case 'd':
-      io_list_inventory(d);
+      io_drop_item(d);
       fail_code = 1;
       break;
     case 'x':
-      io_list_inventory(d);
+      io_expunge_item(d);
       fail_code = 1;
       break;
     case 'i':
@@ -1231,7 +1651,7 @@ void io_handle_input(dungeon *d)
       fail_code = 1;
       break;
     case 'I':
-      io_list_inventory(d);
+      io_inspect_item(d);
       fail_code = 1;
       break;
     case 'L':

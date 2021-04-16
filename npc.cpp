@@ -10,6 +10,7 @@
 #include "event.h"
 #include "pc.h"
 
+
 static uint32_t max_monster_cells(dungeon *d)
 {
   uint32_t i;
