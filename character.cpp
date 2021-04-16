@@ -81,11 +81,6 @@ const char *character_get_name(const character *c)
   return c->name;
 }
 
-const char *character_get_description(const character *c)
-{
-  return c->description;
-}
-
 uint32_t can_see(dungeon *d, pair_t voyeur, pair_t exhibitionist,
                  int is_pc, int learn)
 {

@@ -939,12 +939,7 @@ static void wear_item(dungeon *d, int num){
 				sprintf(message, "You replaced %s with %s", 
 								d->PC->inventory[num]->get_name(), d->PC->equipped[i]->get_name());
 				mvprintw(6 + i, 9, " %-60d. ", i);
-<<<<<<< HEAD
-				mvprintw(16, 9, " %-60s ",
-           "Good job you exchanged your equipped  any button to move on");
-=======
 				mvprintw(16, 9, " %-60s ", message);
->>>>>>> 562d75dc4e1b00a95368f56a01aadab67464c1c3
 				getch();
 				return;
 			}
@@ -1515,7 +1510,7 @@ void io_inspect_monster_pc(dungeon *d)
   	
   	  mvprintw(16, 9, " %-60s ", "What item would you like to inspect?(0-9)");
   mvprintw(17, 9, " %-60s ",
-             d->character_map[dest[dim_y]][dest[dim_x]]->character_get_description());
+             ((npc*) d->character_map[dest[dim_y]][dest[dim_x]])->description);
  		return;
   }
   
