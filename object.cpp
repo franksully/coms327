@@ -97,6 +97,11 @@ int32_t object::get_speed()
   return speed;
 }
 
+int32_t object::get_hit()
+{
+  return hit;
+}
+
 int32_t object::roll_dice()
 {
   return damage.roll();

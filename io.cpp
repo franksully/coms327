@@ -920,6 +920,7 @@ static void wear_item(dungeon *d, int num){
 	if(d->PC->inventory[num] == NULL){
 		return;
 	}
+	char message[80];
 	int32_t type = d->PC->inventory[num]->get_type();
 	for(int i = 0; i < 12; i++){
 		if(d->PC->equipped[i] != NULL){
@@ -927,9 +928,15 @@ static void wear_item(dungeon *d, int num){
 				object *temp = d->PC->equipped[i]; 
 				d->PC->equipped[i] = d->PC->inventory[num];
 				d->PC->inventory[num] = temp;
+				d->PC->speed -= d->PC->inventory[num]->get_speed();
+				d->PC->speed += d->PC->equipped[i]->get_speed();
+				d->PC->hp -= d->PC->inventory[num]->get_hit();
+				d->PC->hp += d->PC->equipped[i]->get_hit();
+
+				sprintf(message, "You replaced %s with %s", 
+								d->PC->inventory[num]->get_name(), d->PC->equipped[i]->get_name());
 				mvprintw(6 + i, 9, " %-60d. ", i);
-				mvprintw(16, 9, " %-60s ",
-           "Good job you put on clothes any button to move on");
+				mvprintw(16, 9, " %-60s ", message);
 				getch();
 				return;
 			}
@@ -939,9 +946,12 @@ static void wear_item(dungeon *d, int num){
 		if(d->PC->equipped[i] == NULL){
 			d->PC->equipped[i] = d->PC->inventory[num]; 
 			d->PC->inventory[num] = NULL;
+			d->PC->speed += d->PC->equipped[i]->get_speed();
+			d->PC->hp += d->PC->equipped[i]->get_hit();
+			
+			sprintf(message, "You equipped %s", d->PC->equipped[i]->get_name());
 			mvprintw(6 + i, 9, " %-60d. ", i);
-			mvprintw(16, 9, " %-60s ",
-           "Good job you put on clothes any button to move on");
+			mvprintw(16, 9, " %-60s ", message);
 			getch();
 			return;
 		}
@@ -964,7 +974,7 @@ static void io_wear_item(dungeon *d)
 
   mvprintw(16, 9, " %-60s ", "What item would you like to wear?(0-9)");
   mvprintw(17, 9, " %-60s ",
-           "Any other button to continue since I got tired of pressing escape.");
+           "Any other button to continue...");
  
 	switch (key = getch()) {
 	  case '0':
@@ -1010,13 +1020,16 @@ static void strip(dungeon *d, int num){
 	if(d->PC->equipped[num] == NULL){
 		return;
 	}
+	char message[80];
 	for(int i = 0; i < 9; i++){
 		if(d->PC->inventory[i] == NULL){
 			d->PC->inventory[i] = d->PC->equipped[num]; 
 			d->PC->equipped[num] = NULL;
+			d->PC->speed -= d->PC->inventory[num]->get_speed();
+			d->PC->hp -= d->PC->inventory[num]->get_hit();
+			sprintf(message, "You unequipped %s", d->PC->inventory[i]->get_name());
 			mvprintw(6 + num, 9, " %-60c. ", nth_letter(num));
-			mvprintw(16, 9, " %-60s ",
-           "Good job you striped any button to move on");
+			mvprintw(16, 9, " %-60s ", message);
       getch();
 			return;
 		}
@@ -1040,7 +1053,7 @@ static void io_strip(dungeon *d)
   }
   mvprintw(16, 9, " %-60s ", "What item would you like to strip?(a-l)");
   mvprintw(17, 9, " %-60s ",
-           "Any other button to continue since I got tired of pressing escape.");
+           "Any other button to continue...");
   
 	switch (key = getch()) {
 	  case 'a':

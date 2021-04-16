@@ -253,3 +253,15 @@ void pc_see_object(character *the_pc, object *o)
     o->has_been_seen();
   }
 }
+
+int has_weapon(pc *p) {
+	for (int i = 0; i < 12; i++) {
+		if (p->equipped[i]) {
+			if (p->equipped[i]->get_type() == objtype_WEAPON) {
+				return i + 1;
+			}
+		}
+	}
+	
+	return 0;
+}
