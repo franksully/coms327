@@ -878,13 +878,19 @@ static void io_list_inventory(dungeon *d)
   	}
   }
 
-  mvprintw(16, 9, " %-60s ", "");
+  mvprintw(16, 9, " %-60s ", "inventory stuff");
   mvprintw(17, 9, " %-60s ",
            "Escape to continue.");
 	while (getch() != 27 /* escape */){}
       
   /* And redraw the dungeon */
   io_display(d);
+}
+
+static char nth_letter(int n)
+{
+    assert(n >= 0 && n <= 25);
+    return "abcdefghijklmnopqrstuvwxyz"[n];
 }
 
 static void io_list_equipped(dungeon *d)
@@ -894,13 +900,13 @@ static void io_list_equipped(dungeon *d)
   mvprintw(5, 9, " %-60s ", "");
   for(int i = 0; i < 12; i++){
   	if(d->PC->equipped[i] == NULL){
-  		mvprintw(6 + i, 9, " %-60d. ", i);
+  		mvprintw(6 + i, 9, " %-60c. ", nth_letter(i));
   	}else{
-  		mvprintw(6 + i, 9, " %d. %-60s ", i, d->PC->equipped[i]->get_name());
+  		mvprintw(6 + i, 9, " %c. %-60s ", nth_letter(i), d->PC->equipped[i]->get_name());
   	}
   }
 
-  mvprintw(18, 9, " %-60s ", "");
+  mvprintw(18, 9, " %-60s ", "equipped stuff");
   mvprintw(19, 9, " %-60s ",
            "Escape to continue.");
 	while (getch() != 27 /* escape */){}
@@ -921,6 +927,10 @@ static void wear_item(dungeon *d, int num){
 				object *temp = d->PC->equipped[i]; 
 				d->PC->equipped[i] = d->PC->inventory[num];
 				d->PC->inventory[num] = temp;
+				mvprintw(6 + i, 9, " %-60d. ", i);
+				mvprintw(16, 9, " %-60s ",
+           "Good job you put on clothes any button to move on");
+				getch();
 				return;
 			}
 		}
@@ -929,10 +939,15 @@ static void wear_item(dungeon *d, int num){
 		if(d->PC->equipped[i] == NULL){
 			d->PC->equipped[i] = d->PC->inventory[num]; 
 			d->PC->inventory[num] = NULL;
+			mvprintw(6 + i, 9, " %-60d. ", i);
+			mvprintw(16, 9, " %-60s ",
+           "Good job you put on clothes any button to move on");
+			getch();
 			return;
 		}
 	}
 }
+
 static void io_wear_item(dungeon *d)
 {
 	int key;
@@ -981,6 +996,88 @@ static void io_wear_item(dungeon *d)
 	    break;
 	  case '9':
 	    wear_item(d, 9);
+	    break;
+	  case 27:/* escape */
+	  	break;
+	  default:
+	  	mvprintw(18, 9, " %-60s ","%s is not valid ", key);
+	}
+      
+  /* And redraw the dungeon */
+  io_display(d);
+}
+static void strip(dungeon *d, int num){
+	if(d->PC->equipped[num] == NULL){
+		return;
+	}
+	for(int i = 0; i < 9; i++){
+		if(d->PC->inventory[i] == NULL){
+			d->PC->inventory[i] = d->PC->equipped[num]; 
+			d->PC->equipped[num] = NULL;
+			mvprintw(6 + num, 9, " %-60c. ", nth_letter(num));
+			mvprintw(16, 9, " %-60s ",
+           "Good job you striped any button to move on");
+      getch();
+			return;
+		}
+	}
+	
+}
+
+
+static void io_strip(dungeon *d)
+{
+	int key;
+	mvprintw(3, 9, " %-60s ", "");
+  mvprintw(4, 9, " %-60s ", "");
+  mvprintw(5, 9, " %-60s ", "");
+  for(int i = 0; i < 12; i++){
+  	if(d->PC->equipped[i] == NULL){
+  		mvprintw(6 + i, 9, " %-60c. ", nth_letter(i));
+  	}else{
+  		mvprintw(6 + i, 9, " %c. %-60s ", nth_letter(i), d->PC->equipped[i]->get_name());
+  	}
+  }
+  mvprintw(16, 9, " %-60s ", "What item would you like to strip?(a-l)");
+  mvprintw(17, 9, " %-60s ",
+           "Any other button to continue since I got tired of pressing escape.");
+  
+	switch (key = getch()) {
+	  case 'a':
+	    strip(d, 0);
+	    break;
+	  case 'b':
+	    strip(d, 1);
+	    break;
+	  case 'c':
+	    strip(d, 2);
+	    break;
+	  case 'd':
+	    strip(d, 3);
+	    break;
+	  case 'e':
+	    strip(d, 4);
+	    break;
+	  case 'f':
+	    strip(d, 5);
+	    break;
+	  case 'g':
+	    strip(d, 6);
+	    break;
+	  case 'h':
+	    strip(d, 7);
+	    break;
+	  case 'i':
+	    strip(d, 8);
+	    break;
+	  case 'j':
+	    strip(d, 9);
+	    break;
+	  case 'k':
+	    strip(d, 10);
+	    break;
+	  case 'l':
+	    strip(d, 11);
 	    break;
 	  case 27:/* escape */
 	  	break;
@@ -1114,7 +1211,7 @@ void io_handle_input(dungeon *d)
       fail_code = 1;
       break;
     case 't':
-      io_list_inventory(d);
+      io_strip(d);
       fail_code = 1;
       break;
     case 'd':
