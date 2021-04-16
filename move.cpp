@@ -107,12 +107,11 @@ void do_combat(dungeon *d, character *atk, character *def)
 													"%s%s eats your %s...",
 													is_unique(atk) ? "" : "the ",
 													atk->name, organs[part]);
-					//io_queue_message("");
 				}
+				io_queue_message("");
 			}
       /* Queue an empty message, otherwise the game will not pause for *
        * player to see above.                                          */
-      io_queue_message("");
 			}
 		else {
 			def->hp -= damage_dealt;
@@ -123,7 +122,13 @@ void do_combat(dungeon *d, character *atk, character *def)
 			else {
 				def->alive = 0;
 				charpair(def->position) = NULL;
+				d->num_monsters--;
 				io_queue_message("You kill %s%s!", is_unique(def) ? "" : "the ", def->name);
+				if (is_boss(def)) {
+					io_queue_message("The dungeon boss has been slain!");
+					d->PC->defeated_boss = true;
+					io_queue_message("");
+				}
 				atk->kills[kill_direct]++;
 				atk->kills[kill_avenged] += (def->kills[kill_direct] +
 																		def->kills[kill_avenged]);
