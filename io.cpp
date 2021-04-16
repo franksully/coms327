@@ -1485,6 +1485,10 @@ void io_inspect_monster_pc(dungeon *d)
     }
   } while (c != 27 && c != 't');
 
+	for(int i = 0; i < 80; i++){
+			mvprintw(0 + i, 0, " %-80s. ", "");
+	}
+
   if (c == 't') {
   	if(!can_see(d, character_get_pos(d->PC),
                 dest, 1, 0)){
@@ -1493,9 +1497,6 @@ void io_inspect_monster_pc(dungeon *d)
         return;  
      }
   }
-  for(int i = 0; i < 10; i++){
-			mvprintw(6 + i, 9, " %-60s. ", "");
-		}
   
   if(charpair(dest) == d->PC){
 		mvprintw(7, 9, "As you invert your eyes and look upon yourself you cant help but feel attracted");
@@ -1672,6 +1673,7 @@ void io_handle_input(dungeon *d)
       break;
     case 'L':
       io_inspect_monster_pc(d);
+			io_display(d);
       fail_code = 1;
       break;  
     case 'q':
