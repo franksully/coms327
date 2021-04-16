@@ -1,0 +1,12 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister	amonm@iastate.edu
+
+This program improves upon the combat system and allows the picking up and
+equipping of items. The do_combat() function of move.cpp was modified so that
+the monsters will swap places instead of killing each other. Additionally, the
+monsters and pc will roll for damage against the other character's hit points.
+Items are automatically picked up off the ground, but must be manually equipped
+to have any effect on combat. Items can boost damage, hitpoints, speed or any
+combination of all three. Items can be equipped, unequipped, inspected, dropped,
+and expunged. Monsters can be inspected in order to view its description. The
+game ends when a monster with the boss attribute is killed or when the pc dies.
