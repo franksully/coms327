@@ -1508,9 +1508,12 @@ void io_inspect_monster_pc(dungeon *d)
   
   if(d->character_map[dest[dim_y]][dest[dim_x]]){
   	
-  	  mvprintw(16, 9, " %-60s ", "What item would you like to inspect?(0-9)");
-  mvprintw(17, 9, " %-60s ",
+
+  	mvprintw(17, 9, " %-60s ",
              ((npc*) d->character_map[dest[dim_y]][dest[dim_x]])->description);
+           	mvprintw(16, 9, " %-60s ",
+	     "Any button to move on");
+		getch();
  		return;
   }
   
@@ -1668,7 +1671,7 @@ void io_handle_input(dungeon *d)
       fail_code = 1;
       break;
     case 'L':
-      io_list_inventory(d);
+      io_inspect_monster_pc(d);
       fail_code = 1;
       break;  
     case 'q':
