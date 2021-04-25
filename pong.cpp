@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
 	io_initialzie();
     mvprintw( 5, 5, "O");
     refresh();
-    PongBall *ball = new PongBall(0,0,3); 
+    PongBall *ball = new PongBall(); 
+    
+    
     getchar();
 	endwin();
     return 0;
