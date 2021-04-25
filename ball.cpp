@@ -6,14 +6,14 @@
 #include "pong.h"
 #include "io.h"
 
-void ball_reverse_x(const PongBall *b)
+void ball_reverse_x(PongBall *b)
 {
-  b->directionX = b->!directionX;
+  b->directionX = -b->directionX;
 }
 
-void ball_reverse_y(const PongBall *b)
+void ball_reverse_y(PongBall *b)
 {
-  b->directionY = b->!directionY;
+  b->directionY = -b->directionY;
 }
 
 int ball_get_y(const PongBall *b)
@@ -31,13 +31,18 @@ int ball_get_speed(const PongBall *b)
   return b->speed;
 }
 
-void bounce(const PongBall *b){
-	if(ball_get_y(b) > 21) || ball_get_y(b) < 0){
+void ball_bounce(PongBall *b){
+	if(ball_get_y(b) > 21 || ball_get_y(b) < 0){
 		ball_reverse_y(b);
 	}
 	if(ball_get_x(b) < 3 || ball_get_x(b) > 77){
 		ball_reverse_x(b);
 	}
+}
+
+void ball_move(PongBall *b){
+	b->x += b->directionX;
+	b->y += b->directionY;
 }
 
 

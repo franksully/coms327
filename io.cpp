@@ -11,5 +11,15 @@ void io_initialzie(void){
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 	start_color();
+}
 
+void io_draw(void){
+
+	initscr();
+	raw();
+	noecho();
+	curs_set(0);
+	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
+	start_color();
 }
