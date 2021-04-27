@@ -42,13 +42,10 @@ int ball_get_speed(const PongBall *b)
   return b->speed;
 }
 
-<<<<<<< HEAD
 void ball_bounce(PongBall *b){
 	if(ball_get_y(b) > 21 || ball_get_y(b) < 0){
-=======
 void bounce(const PongBall *b){
 	if(ball_get_y(b) > 21) || ball_get_y(b) < 0){
->>>>>>> 1df157d... paddle?
 		ball_reverse_y(b);
 	}
 	if(ball_get_x(b) < 3 || ball_get_x(b) > 77){
@@ -56,12 +53,8 @@ void bounce(const PongBall *b){
 	}
 }
 
-<<<<<<< HEAD
 void ball_move(PongBall *b){
 	b->x += b->directionX;
 	b->y += b->directionY;
 }
-
-=======
->>>>>>> 1df157d... paddle?
 

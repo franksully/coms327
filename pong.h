@@ -1,8 +1,5 @@
 #include <stdlib.h>
 
-<<<<<<< HEAD
-
-=======
 class PongBall {        
   public:          
     int x;  
@@ -29,5 +26,4 @@ PongBall::PongBall(int xx, int yy, int z, int a, int q){
 	directionX = a;
 	directionY = q;
 }
->>>>>>> 1df157d... paddle?
 
