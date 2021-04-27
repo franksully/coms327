@@ -35,7 +35,7 @@ void ball_bounce(PongBall *b){
 	if(ball_get_y(b) > 21 || ball_get_y(b) < 0){
 		ball_reverse_y(b);
 	}
-	if(ball_get_x(b) < 3 || ball_get_x(b) > 77){
+	if(ball_get_x(b) < 4 || ball_get_x(b) > 74){
 		ball_reverse_x(b);
 	}
 }

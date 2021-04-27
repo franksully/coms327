@@ -10,6 +10,7 @@ void io_initialzie(void){
 	curs_set(0);
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
+	resizeterm(1000, 1000);
 	start_color();
 }
 

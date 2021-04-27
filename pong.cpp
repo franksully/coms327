@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
     	//mvprintw(44, 0, "%d %d", ball_get_x(ball), ball_get_y(ball));
     	refresh();
     	getchar();
- 	
     }
 
     
