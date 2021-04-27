@@ -4,5 +4,5 @@ class Paddle {
 		char upKey, downKey;
 		
 		void draw();
-		Paddle::Paddle(int x, int y, int length, char up, char down);
-}
+		Paddle(int x, int y, int length, char up, char down);
+};

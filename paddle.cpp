@@ -2,7 +2,7 @@
 
 #include "paddle.h"
 
-Paddle::draw() {
+void Paddle::draw() {
 	for (int i = 2; i < 22; i++) {
 		mvprintw(i, this->x, (const char*) ' ');
 	}
