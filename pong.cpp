@@ -39,6 +39,11 @@ int main(int argc, char *argv[])
     
     //mvprintw( 5,5, "O %d", ball_get_x(ball));
     refresh();
+    mvprintw( 5, 5, "O");
+    refresh();
+    //PongBall *ball = new PongBall(); 
+    
+    
     getchar();
 	endwin();
     return 0;
