@@ -9,12 +9,16 @@ class PongBall {
     int directionY;  
     PongBall(int x, int y, int z, int a, int q);   
     PongBall();   
+    void ball_reverse_x();
+		void ball_reverse_y();
+		int ball_get_y();
+		int ball_get_x();
+		int ball_get_speed();
+		void ball_bounce();
+		void ball_move();
 };
-<<<<<<< HEAD
+
 PongBall::PongBall(){   
-=======
-PongBall::PongBall();    
->>>>>>> 1df157d... paddle?
 	x = 40;
 	y = 10;
 	speed = 3;
@@ -22,11 +26,8 @@ PongBall::PongBall();
 	directionY = 1;
 }
 
-<<<<<<< HEAD
+
 PongBall::PongBall(int xx, int yy, int z, int a, int q){    
-=======
-PongBall::PongBall(int xx, int yy, int z int a, int q);    
->>>>>>> 1df157d... paddle?
 	x = xx;
 	y = yy;
 	speed = z;
@@ -34,14 +35,45 @@ PongBall::PongBall(int xx, int yy, int z int a, int q);
 	directionY = q;
 }
 
-<<<<<<< HEAD
-void ball_reverse_x(PongBall *b);
-void ball_reverse_y(PongBall *b);
-int ball_get_y(const PongBall *b);
-int ball_get_x(const PongBall *b);
-int ball_get_speed(const PongBall *b);
-void ball_bounce(PongBall *b);
-void ball_move(PongBall *b);
-=======
+void PongBall::ball_reverse_x()
+{
+  this->directionX = -this->directionX;
+}
 
->>>>>>> 1df157d... paddle?
+void PongBall::ball_reverse_y()
+{
+  this->directionY = -this->directionY;
+}
+
+int PongBall::ball_get_y()
+{
+  return this->y;
+}
+
+int PongBall::ball_get_x()
+{
+  return this->x;
+}
+
+int PongBall::ball_get_speed()
+{
+  return this->speed;
+}
+
+
+void PongBall::ball_bounce(){
+	if((this->ball_get_y() > 21) || (this->ball_get_y() < 0)){
+		this->ball_reverse_y();
+	}
+	if(this->ball_get_x() < 4 || this->ball_get_x() > 74){
+		this->ball_reverse_x();
+	}
+}
+
+void PongBall::ball_move(){
+	this->x += this->directionX;
+	this->y += this->directionY;
+}
+
+
+
