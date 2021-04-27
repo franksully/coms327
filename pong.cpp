@@ -42,9 +42,8 @@ int main(int argc, char *argv[])
     refresh();
     //PongBall *ball = new PongBall(); 
     
-    
     getchar();
-	endwin();
+		endwin();
     return 0;
 }
 
