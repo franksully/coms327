@@ -16,6 +16,7 @@ class PongBall {
 		int ball_get_speed();
 		void ball_bounce();
 		void ball_move();
+		void ball_draw();
 };
 
 

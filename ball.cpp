@@ -63,3 +63,7 @@ void PongBall::ball_move(){
 	this->y += this->directionY;
 }
 
+void PongBall::ball_draw(){
+	mvprintw(this->y, this->x, "O");
+}
+
