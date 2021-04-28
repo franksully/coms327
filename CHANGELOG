@@ -100,3 +100,8 @@
 4/24/2021 18:00 ; (Frank) created make file
 4/24/2021 18:15 ; (Amon) began work on pong.cpp
 4/24/2021 19:00 ; (Amon) got pong ball to draw to the screen
+4/24/2021 19:10 ; (Frank) began work on paddle code
+4/27/2021 18:30 ; (Amon) merged paddle code into project
+4/27/2021 18:45 ; (Frank) adjusted bounds of ball bounce
+4/27/2021 19:00 ; (Amon) tweaked values for ball movement
+4/27/2021 19:10 ; (Frank) allowed drawing of paddles on the screen

@@ -17,6 +17,3 @@ class PongBall {
 		void ball_bounce();
 		void ball_move();
 };
-
-
-
