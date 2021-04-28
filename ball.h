@@ -18,6 +18,3 @@ class PongBall {
 		void ball_move();
 		void ball_draw();
 };
-
-
-

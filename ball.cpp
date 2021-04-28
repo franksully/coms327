@@ -50,7 +50,7 @@ int PongBall::ball_get_speed()
 
 
 void PongBall::ball_bounce(){
-	if((this->ball_get_y() > 21) || (this->ball_get_y() < 0)){
+	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 1)){
 		this->ball_reverse_y();
 	}
 	if(this->ball_get_x() < 4 || this->ball_get_x() > 74){

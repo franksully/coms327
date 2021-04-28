@@ -4,10 +4,10 @@
 
 void Paddle::draw() {
 	for (int i = 2; i < 22; i++) {
-		mvprintw(i, this->x, (const char*) ' ');
+		mvprintw(i, this->x, " ");
 	}
 	for (int i = 0; i < length; i++) {
-		mvprintw(this->y + i, this->x, (const char*) '|');
+		mvprintw(this->y + i, this->x, "|");
 	}
 };
 		
