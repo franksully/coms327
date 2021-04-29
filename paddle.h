@@ -1,4 +1,3 @@
-
 class Paddle {
 	public:
 		int x, y, length;
