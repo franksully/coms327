@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "ball.h"
+
 #include "io.h"
 
 PongBall::PongBall(){   
@@ -66,4 +67,34 @@ void PongBall::ball_move(){
 void PongBall::ball_draw(){
 	mvprintw(this->y, this->x, "O");
 }
+
+
+int PongBall::ball_collision(Paddle *left, Paddle *right){
+	mvprintw(0, 10, "loc %d", this->x % 79);
+	
+	Paddle *paddle; 
+	if(this->x < 1){
+		mvprintw(0, 10, "left");	
+		paddle = left;
+	}else if(this->x > 78){
+		mvprintw(0, 10, "right");
+		paddle = right;
+	}
+	if(paddle){
+		if(paddle->y <= this->y && paddle->y + paddle->length >= this->y){
+			mvprintw(0, 35, "I hit a paddle");
+			return 1;
+		}
+	}
+
+	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 2)){
+		mvprintw(0, 35, "I hit a wall");
+		return 1;
+	}
+	
+	return 0;
+}
+
+
+
 

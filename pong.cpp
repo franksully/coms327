@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #include "pong.h"
-#include "paddle.h"
 #include "ball.h"
 #include "io.h"
 
@@ -44,7 +43,9 @@ int main(int argc, char *argv[])
 		mvprintw(0, 77, "%d", scoreRight);
 
 	   	ball->ball_move();
-	   	ball->ball_bounce();
+	   	if(ball->ball_collision(left, right)){
+		   	ball->ball_bounce();
+	   	}
 	   	ball->ball_draw();
 	  	nodelay(stdscr,1);
 		if(getch() >= 0){
