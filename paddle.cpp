@@ -18,3 +18,15 @@ Paddle::Paddle(int x, int y, int length, char up, char down) {
 	upKey = up;
 	downKey = down;
 };
+
+void Paddle::moveUp(char in) {
+	if (in == this->upKey) {
+		this->y--;
+	}
+}
+
+void Paddle::moveDown(char in) {
+	if (in == this->downKey) {
+		this->y++;
+	}
+}

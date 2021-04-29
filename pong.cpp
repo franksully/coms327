@@ -21,21 +21,25 @@ int main(int argc, char *argv[])
   PongBall *ball = new PongBall(); 
 	Paddle *left = new Paddle(0,6,6,'w','s');
 	Paddle *right = new Paddle(79,6,6,'u','j');
-	left->draw();
-	right->draw();
 	refresh();
-    
-	for(int i = 0; i < 150; i++){
+   
+	char in;
+	
+	while (in != 'Q'){
+		nodelay(stdscr,1);
+		in = getch();
+		left->moveUp(in);
+		left->moveDown(in);
+		right->moveUp(in);
+		right->moveDown(in);
 		mvprintw(ball->ball_get_y(), ball->ball_get_x(), " ");
 		mvprintw(1, 0, line);
 		mvprintw(22, 0, line);
+		left->draw();
+		right->draw();
    	ball->ball_move();
    	ball->ball_bounce();
    	ball->ball_draw();
-  	nodelay(stdscr,1);
-		if(getch() >= 0){
-  		mvprintw(5, 5, "your num is %d", getch());
-  	}
     	
    	refresh();
    	usleep(64000);
