@@ -1,0 +1,1 @@
+pong.o: pong.cpp pong.h paddle.h ball.h io.h

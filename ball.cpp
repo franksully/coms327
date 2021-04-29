@@ -7,10 +7,10 @@
 #include "io.h"
 
 PongBall::PongBall(){   
-	x = 40;
+	x = 1;
 	y = 10;
 	speed = 3;
-	directionX = 4;
+	directionX = 3;
 	directionY = 1;
 }
 
@@ -50,10 +50,10 @@ int PongBall::ball_get_speed()
 
 
 void PongBall::ball_bounce(){
-	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 1)){
+	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 2)){
 		this->ball_reverse_y();
 	}
-	if(this->ball_get_x() < 4 || this->ball_get_x() > 74){
+	if(this->ball_get_x() <= 1 || this->ball_get_x() >= 78){
 		this->ball_reverse_x();
 	}
 }
