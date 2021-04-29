@@ -56,7 +56,10 @@ int main(int argc, char *argv[])
 
 	   	ball->ball_draw();
 	  	nodelay(stdscr,1);
-	
+		if(getch() >= 0){
+  			mvprintw(0, 5, "your num is %d", getch());
+  		}
+
 	 	refresh();
 		usleep(64000);
 	}    
