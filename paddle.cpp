@@ -49,9 +49,31 @@ void Paddle::moveSmartRight(int x, int y, int directionX, int directionY){
 	if(this->y + this->length/2 < y){
 		this->y++;
 	}
+}
 
+void Paddle::moveSmartLeft(int x, int y, int directionX, int directionY){
+	int counter = 0;
+
+	while(x > this->x && x < 2*79){
+		x += directionX;
+		counter++;
+	} 
 	
-
+	
+	
+	int yPos = 1;
+	for(;counter > 0; counter--){
+		y += directionY * yPos;
+		if(y <= 2 || y > 21){
+			yPos = -yPos;
+		}			
+	}
+	if(this->y + this->length/2 > y){
+		this->y--;
+	}
+	if(this->y + this->length/2 < y){
+		this->y++;
+	}
 }
 
 void Paddle::moveDown(char in) {

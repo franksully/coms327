@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   	unsigned int scoreLeft = 0;
   	unsigned int scoreRight = 0;
   	
-	Paddle *left = new Paddle(0,6,6,'w','s');
+	Paddle *left = new Paddle(0,6,1,'w','s');
 	Paddle *right = new Paddle(79,6,1,'u','j');
 	mvprintw(0, 2, "%d", scoreLeft);
 	mvprintw(0, 77, "%d", scoreRight);
@@ -34,8 +34,9 @@ int main(int argc, char *argv[])
 		in = getch();
 		mvprintw(1, 0, line);
 		mvprintw(22, 0, line);
-		left->moveUp(in);
-		left->moveDown(in);
+		//left->moveUp(in);
+		//left->moveDown(in);
+		left->moveSmartLeft(ball->x, ball->y, ball->directionX, ball->directionY);
 		right->moveSmartRight(ball->x, ball->y, ball->directionX, ball->directionY);
 		//right->moveUp(in);
 		//right->moveDown(in);
