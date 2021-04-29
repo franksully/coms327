@@ -22,10 +22,11 @@ int main(int argc, char *argv[])
 	
 	char mode;
 	
+	mvprintw(11, 30, "0 for 0-player mode");
 	mvprintw(12, 30, "1 for 1-player mode");
 	mvprintw(13, 30, "2 for 2-player mode");
 	
-	while (mode != 'Q' && mode != '1' && mode != '2'){
+	while (mode != 'Q' && mode != '1' && mode != '2' && mode != '0'){
 		mode = getch();
 	}
 	
@@ -33,14 +34,20 @@ int main(int argc, char *argv[])
 	clrtoeol();
 	move(12,0);
 	clrtoeol();
+	move(11,0);
+	clrtoeol();
   	
-	Paddle *left = new Paddle(0,6,6,'w','s');
+	Paddle *left;
 	Paddle *right;
-	if (mode == '1') {
+	if (mode == '0') {
 		right = new Paddle(79,6,1,'u','j');
-	}
-	else {
+		left = new Paddle(0,6,1,'w','s');
+	}else if (mode == '1') {
+		right = new Paddle(79,6,1,'u','j');
+		left = new Paddle(0,6,6,'w','s');
+	}else {
 		right = new Paddle(79,6,6,'u','j');
+		left = new Paddle(0,6,6,'w','s');
 	}
 	mvprintw(0, 2, "%d", scoreLeft);
 	mvprintw(0, 77, "%d", scoreRight);
@@ -60,13 +67,17 @@ int main(int argc, char *argv[])
 		//right->moveSmartRight(ball->x, ball->y, ball->directionX, ball->directionY);
 		//right->moveUp(in);
 		//right->moveDown(in);
-
-		left->moveUp(in);
-		left->moveDown(in);
-		if (mode == '1') {
+		if (mode == '0') {
+			right->moveSmartRight(ball->x, ball->y, ball->directionX, ball->directionY);
+			left->moveSmartLeft(ball->x, ball->y, ball->directionX, ball->directionY);
+		}else if (mode == '1') {
+			left->moveUp(in);
+			left->moveDown(in);
 			right->moveSmartRight(ball->x, ball->y, ball->directionX, ball->directionY);
 		}
 		else {
+			left->moveUp(in);
+			left->moveDown(in);
 			right->moveUp(in);
 			right->moveDown(in);
 		}
