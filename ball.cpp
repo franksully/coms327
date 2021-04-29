@@ -50,12 +50,29 @@ int PongBall::ball_get_speed()
 }
 
 
-void PongBall::ball_bounce(){
+void PongBall::ball_bounce(Paddle *left, Paddle *right){
 	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 2)){
 		this->ball_reverse_y();
 	}
-	if(this->ball_get_x() <= 1 || this->ball_get_x() >= 78){
-		this->ball_reverse_x();
+	
+	mvprintw(0, 10, "loc %d", this->x % 79);
+	
+	Paddle *paddle; 
+	int yes = 0;
+	if(this->x < 1){
+		mvprintw(0, 10, "left");	
+		paddle = left;
+		yes = 1;
+	}else if(this->x > 78){
+		mvprintw(0, 10, "right");
+		paddle = right;
+		yes = 1;
+	}
+	if(yes){
+		if(paddle->y <= this->y && paddle->y + paddle->length >= this->y){
+			mvprintw(0, 35, "I hit a paddle %d %d %d", this->y, paddle->y, paddle->y + paddle->length);
+			this->ball_reverse_x();
+		}
 	}
 }
 
@@ -69,31 +86,6 @@ void PongBall::ball_draw(){
 }
 
 
-int PongBall::ball_collision(Paddle *left, Paddle *right){
-	mvprintw(0, 10, "loc %d", this->x % 79);
-	
-	Paddle *paddle; 
-	if(this->x < 1){
-		mvprintw(0, 10, "left");	
-		paddle = left;
-	}else if(this->x > 78){
-		mvprintw(0, 10, "right");
-		paddle = right;
-	}
-	if(paddle){
-		if(paddle->y <= this->y && paddle->y + paddle->length >= this->y){
-			mvprintw(0, 35, "I hit a paddle");
-			return 1;
-		}
-	}
-
-	if((this->ball_get_y() > 21) || (this->ball_get_y() <= 2)){
-		mvprintw(0, 35, "I hit a wall");
-		return 1;
-	}
-	
-	return 0;
-}
 
 
 

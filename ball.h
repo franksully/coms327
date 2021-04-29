@@ -15,8 +15,7 @@ class PongBall {
 		int ball_get_y();
 		int ball_get_x();
 		int ball_get_speed();
-		void ball_bounce();
+		void ball_bounce(Paddle *left, Paddle *right);
 		void ball_move();
 		void ball_draw();
-		int ball_collision(Paddle *left, Paddle *right);
 };
