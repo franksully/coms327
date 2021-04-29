@@ -23,13 +23,17 @@ int main(int argc, char *argv[])
   	
 	Paddle *left = new Paddle(0,6,6,'w','s');
 	Paddle *right = new Paddle(79,6,6,'u','j');
+	mvprintw(0, 2, "%d", scoreLeft);
+	mvprintw(0, 77, "%d", scoreRight);
 	refresh();
    
 	char in;
 	
-	while (in != 'Q'){
+	while (in != 'Q' && scoreLeft < 7 && scoreRight < 7){
 		nodelay(stdscr,1);
 		in = getch();
+		mvprintw(1, 0, line);
+		mvprintw(22, 0, line);
 		left->moveUp(in);
 		left->moveDown(in);
 		right->moveUp(in);
@@ -37,41 +41,42 @@ int main(int argc, char *argv[])
 		left->draw();
 		right->draw();
 		mvprintw(ball->ball_get_y(), ball->ball_get_x(), " ");
-		mvprintw(1, 0, line);
-		mvprintw(22, 0, line);
-		mvprintw(0, 2, "%d", scoreLeft);
-		mvprintw(0, 77, "%d", scoreRight);
 
 	   	ball->ball_move();
 
 	   	ball->ball_bounce(left, right);
-	   	if(ball->x < -2){
+	   	if(ball->x < 0){
 	   		scoreRight++;
-	   		ball->ball_reset();
+				mvprintw(0, 2, "%d", scoreLeft);
+				mvprintw(0, 77, "%d", scoreRight);
+				if(scoreRight < 7) {
+					ball->ball_reset();
+				}
 	   	}
-	   	if(ball->x > 81){
+	   	if(ball->x > 79){
 	   		scoreLeft++;
-	   		ball->ball_reset();
+				mvprintw(0, 2, "%d", scoreLeft);
+				mvprintw(0, 77, "%d", scoreRight);
+	   		if(scoreLeft < 7) {
+					ball->ball_reset();
+				}
 	   	}
 
 	   	ball->ball_draw();
 	  	nodelay(stdscr,1);
-		if(getch() >= 0){
-  			mvprintw(0, 5, "your num is %d", getch());
-  		}
-
+	
 	 	refresh();
 		usleep(64000);
 	}    
 	
-    //mvprintw( 5,5, "O %d", ball_get_x(ball));
+  mvprintw(12, 35, "GAME OVER!");
 
 
-    refresh();
-    //PongBall *ball = new PongBall(); 
+  refresh();
+  //PongBall *ball = new PongBall(); 
     
-    getchar();
+  getchar();
 	endwin();
-    return 0;
+  return 0;
 }
 
