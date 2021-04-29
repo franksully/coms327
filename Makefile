@@ -8,13 +8,13 @@ CXXFLAGS = -Wall -Werror -ggdb3 -funroll-loops
 pong: pong.o io.o ball.o paddle.o
 	$(CXX) $(CXXFLAGS) -o pong pong.o io.o ball.o paddle.o -lncurses
 	
-pong.o: pong.cpp io.h pong.h
+pong.o: pong.cpp io.h
 	$(CXX) $(CXXFLAGS) -c pong.cpp -lncurses
 	
 io.o: io.h
 	$(CXX) $(CXXFLAGS) -c io.cpp -lncurses
 
-ball.o: pong.h io.h
+ball.o: io.h paddle.h
 	$(CXX) $(CXXFLAGS) -c ball.cpp -lncurses
 
 paddle.o: paddle.h

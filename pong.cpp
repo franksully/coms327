@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include "pong.h"
 #include "ball.h"
 #include "io.h"
 

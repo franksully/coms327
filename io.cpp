@@ -12,7 +12,3 @@ void io_initialzie(void){
   	noecho();
 	
 }
-
-void io_draw(void){
-
-}
