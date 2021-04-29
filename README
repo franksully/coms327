@@ -1,0 +1,12 @@
+Frank Sullivan	franks1@iastate.edu
+Amon McAllister amonm@iastate.edu
+
+This is a simple pong game rendered with ncurses. There is one ball and two
+paddles, one on each side of the board. The ball will bounce back and forth
+until it misses one of the paddles. At that point, the opposite player's score
+will be incremented. The game ends at 7 points. Alternatively, the game can be
+forcibly ended with the 'Q' key (shift+q). By default, the left paddle can be
+moved up and down with 'w' and 's' respectively. The right uses 'u' and 'j' as
+its default controls if it is controlled by the player. The other option is a
+1-player mode versus the AI.  paddle.cpp contains the class definition for the
+paddles that are used and ball.cpp contains the class for the ball.
