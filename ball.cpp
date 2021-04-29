@@ -11,7 +11,7 @@ PongBall::PongBall(){
 	x = 40;
 	y = 10;
 	speed = 3;
-	directionX = 3;
+	directionX = 1;
 	directionY = 1;
 }
 
@@ -64,12 +64,12 @@ void PongBall::ball_bounce(Paddle *left, Paddle *right){
 		paddle = left;
 		yes = 1;
 	}else if(this->x > 78){
-		mvprintw(0, 10, "right");
+		//mvprintw(0, 10, "right");
 		paddle = right;
 		yes = 1;
 	}
 	if(yes){
-		if(paddle->y <= this->y && paddle->y + paddle->length >= this->y){
+		if(paddle->y <= this->y && paddle->y + paddle->length > this->y){
 			//mvprintw(0, 35, "I hit a paddle %d %d %d", this->y, paddle->y, paddle->y + paddle->length);
 			this->ball_reverse_x();
 		}
@@ -90,10 +90,10 @@ void PongBall::ball_reset(){
 	this->x = 40;
 	this->y = 10;
 	this->ball_draw();
-	mvprintw(0, 25, "press anything to contuine");	
+	mvprintw(0, 27, "press anything to continue");	
 	refresh();
 	getchar();
-	mvprintw(0, 25, "                          ");
+	mvprintw(0, 27, "                          ");
 	refresh();
 }
 
