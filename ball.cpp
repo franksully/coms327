@@ -11,7 +11,7 @@ PongBall::PongBall(){
 	x = 40;
 	y = 10;
 	speed = 3;
-	directionX = 3;
+	directionX = 1;
 	directionY = 1;
 }
 

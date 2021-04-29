@@ -20,13 +20,13 @@ Paddle::Paddle(int x, int y, int length, char up, char down) {
 };
 
 void Paddle::moveUp(char in) {
-	if (in == this->upKey) {
+	if (in == this->upKey && this->y > 2) {
 		this->y--;
 	}
 }
 
 void Paddle::moveDown(char in) {
-	if (in == this->downKey) {
+	if (in == this->downKey && this->y + this->length < 23) {
 		this->y++;
 	}
 }
