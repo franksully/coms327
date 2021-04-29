@@ -2,6 +2,7 @@
 
 #include "paddle.h"
 
+
 void Paddle::draw() {
 	for (int i = 2; i < 22; i++) {
 		mvprintw(i, this->x, " ");
@@ -23,6 +24,37 @@ void Paddle::moveUp(char in) {
 	if (in == this->upKey) {
 		this->y--;
 	}
+}
+
+void Paddle::moveSmartRight(int x, int y, int directionX, int directionY){
+	if(directionX < 0){
+		if(this->y + this->length/2 > y){
+			this->y--;
+		}else{
+			this->y++;
+		}
+	}else{
+		int counter = 0;
+		while(x < this->x){
+			x += directionX;
+			counter++;
+		} 
+		
+		int yPos = 1;
+		for(;counter > 0; counter--){
+			y += directionY * yPos;
+			if(y <= 2 || y > 21){
+				yPos = -yPos;
+			}			
+		}
+		if(this->y + this->length/2 > y){
+			this->y--;
+		}else{
+			this->y++;
+		}
+
+	}
+
 }
 
 void Paddle::moveDown(char in) {

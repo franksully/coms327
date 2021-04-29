@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
 		in = getch();
 		left->moveUp(in);
 		left->moveDown(in);
-		right->moveUp(in);
-		right->moveDown(in);
+		right->moveSmartRight(ball->x, ball->y, ball->directionX, ball->directionY);
+		//right->moveUp(in);
+		//right->moveDown(in);
 		left->draw();
 		right->draw();
 		mvprintw(ball->ball_get_y(), ball->ball_get_x(), " ");
