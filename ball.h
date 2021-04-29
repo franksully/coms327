@@ -18,4 +18,5 @@ class PongBall {
 		void ball_bounce(Paddle *left, Paddle *right);
 		void ball_move();
 		void ball_draw();
+		void ball_reset();
 };

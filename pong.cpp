@@ -45,12 +45,18 @@ int main(int argc, char *argv[])
 	   	ball->ball_move();
 
 	   	ball->ball_bounce(left, right);
+	   	if(ball->x < -2){
+	   		scoreRight++;
+	   		ball->ball_reset();
+	   	}
+	   	if(ball->x > 81){
+	   		scoreLeft++;
+	   		ball->ball_reset();
+	   	}
 
 	   	ball->ball_draw();
 	  	nodelay(stdscr,1);
-		if(getch() >= 0){
-  			mvprintw(0, 5, "your num is %d", getch());
-  		}
+	
 	 	refresh();
 		usleep(64000);
 	}    
